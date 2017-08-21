@@ -12,6 +12,10 @@ public class ContractLog {
 	float price;
 	String period_of_delivery;
 	String invoice_date;
+	
+	public ContractLog(){
+		
+	}
 	public int getContract_id() {
 		return contract_id;
 	}
