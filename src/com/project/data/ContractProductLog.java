@@ -9,6 +9,9 @@ public class ContractProductLog {
 		this.contract_id = contract_id;
 		this.product_id = product_id;
 	}
+	public ContractProductLog() {
+		// TODO Auto-generated constructor stub
+	}
 	public int getContract_id() {
 		return contract_id;
 	}
