@@ -17,7 +17,7 @@ public class ContractLogImpl implements ContractLogDao{
 		PreparedStatement ps = null;
 		boolean result = false;
 			try {
-				ps = conn.prepareStatement("Insert into ContractLog values(?,?,?,?,?,?,?,?,?,?");
+				ps = conn.prepareStatement("Insert into ContractLog values(?,?,?,?,?,?,?,?,?,?)");
 				ps.setInt(1,contract.getContract_id());
 				ps.setInt(3,contract.getBuyer_id());
 				ps.setInt(2,contract.getSeller_id());
@@ -43,9 +43,10 @@ public class ContractLogImpl implements ContractLogDao{
 					e.printStackTrace();
 				}
 			}
+			return result;
 			
 		
-		return false;
+		
 		
 	}
 	public ContractLog selectContract(int contract_id){

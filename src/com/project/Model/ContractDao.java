@@ -9,5 +9,5 @@ public interface ContractDao {
 
 	boolean insertFinalContract(ContractLog contract);
 	Contract selectContract(int contract_id);
-	ArrayList<Contract> searchContract(int contract_id);
+	ArrayList<Contract> fetchAllContract(int user_id);
 }

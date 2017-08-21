@@ -5,7 +5,6 @@ public class Contract {
 	int contract_id;
 	int seller_id;
 	int buyer_id;
-	int status_id;
 	int delivery_term_id;
 	int payment_term_id;
 	int proposal_id;
@@ -34,12 +33,7 @@ public class Contract {
 	public void setBuyer_id(int buyer_id) {
 		this.buyer_id = buyer_id;
 	}
-	public int getStatus_id() {
-		return status_id;
-	}
-	public void setStatus_id(int status_id) {
-		this.status_id = status_id;
-	}
+
 	public int getDelivery_term_id() {
 		return delivery_term_id;
 	}
@@ -76,13 +70,12 @@ public class Contract {
 	public void setInvoice_date(String invoice_date) {
 		this.invoice_date = invoice_date;
 	}
-	public Contract(int contract_id, int seller_id, int buyer_id, int status_id, int delivery_term_id,
+	public Contract(int contract_id, int seller_id, int buyer_id, int delivery_term_id,
 			int payment_term_id, int proposal_id, float price, String period_of_delivery, String invoice_date) {
 		super();
 		this.contract_id = contract_id;
 		this.seller_id = seller_id;
 		this.buyer_id = buyer_id;
-		this.status_id = status_id;
 		this.delivery_term_id = delivery_term_id;
 		this.payment_term_id = payment_term_id;
 		this.proposal_id = proposal_id;

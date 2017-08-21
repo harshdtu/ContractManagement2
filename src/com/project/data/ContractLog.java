@@ -12,7 +12,14 @@ public class ContractLog {
 	float price;
 	String period_of_delivery;
 	String invoice_date;
+	int count;
 	
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 	public ContractLog(){
 		
 	}
@@ -77,7 +84,7 @@ public class ContractLog {
 		this.invoice_date = invoice_date;
 	}
 	public ContractLog(int contract_id, int seller_id, int buyer_id, int status_id, int delivery_term_id,
-			int payment_term_id, int proposal_id, float price, String period_of_delivery, String invoice_date) {
+			int payment_term_id, int proposal_id, float price, String period_of_delivery, String invoice_date,int count) {
 		super();
 		this.contract_id = contract_id;
 		this.seller_id = seller_id;
@@ -89,6 +96,7 @@ public class ContractLog {
 		this.price = price;
 		this.period_of_delivery = period_of_delivery;
 		this.invoice_date = invoice_date;
+		this.count=count;
 	}
 	
 	
