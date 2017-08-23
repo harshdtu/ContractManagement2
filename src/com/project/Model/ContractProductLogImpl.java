@@ -6,18 +6,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import com.project.data.ContractProductLog;
+import com.project.data.ContractProductFeatureLog;
 import com.project.database.SQLConnection;
 
 public class ContractProductLogImpl implements ContractProductLogDao {
 	 Connection conn = SQLConnection.getConnection();
 
 	@Override
-	public ArrayList<ContractProductLog> selectContractProduct(int contract_id) {
+	public ArrayList<ContractProductFeatureLog> selectContractProduct(int contract_id) {
 		// TODO Auto-generated method stub
 		Statement stmt = null;
-		ArrayList<ContractProductLog> contractProductLog = new ArrayList<>();
-		ContractProductLog contractProduct = new ContractProductLog();
+		ArrayList<ContractProductFeatureLog> contractProductLog = new ArrayList<>();
+		ContractProductFeatureLog contractProduct = new ContractProductFeatureLog();
 		try {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("Select * from ContractproductLog where contract_id ="+contract_id);
@@ -41,7 +41,7 @@ public class ContractProductLogImpl implements ContractProductLogDao {
 	}
 
 	@Override
-	public boolean insertContractProduct(ContractProductLog contractProductLog) {
+	public boolean insertContractProduct(ContractProductFeatureLog contractProductLog) {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null;
 		boolean result = false;

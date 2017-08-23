@@ -9,7 +9,7 @@ import com.project.data.ContractFeature;
 import com.project.data.ContractProduct;
 import com.project.database.SQLConnection;
 
-public class ContractProductImpl implements ContractProductDao {
+public class ContractProductImpl implements ContractProductFeatureDao {
 	Connection conn = SQLConnection.getConnection();
 	
 	@Override

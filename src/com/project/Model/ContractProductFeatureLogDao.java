@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.project.data.ContractFeatureLog;
 
-public interface ContractFeatureLogDao {
+public interface ContractProductFeatureLogDao {
 	
 	boolean addContractFeature(ContractFeatureLog contractFeatureLog);
 	ArrayList<ContractFeatureLog> selectContractFeature(int contract_id);
