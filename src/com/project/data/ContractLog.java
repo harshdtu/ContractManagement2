@@ -1,39 +1,42 @@
 package com.project.data;
 
-public class Contract {
+public class ContractLog {
 	
 	int contract_id;
-	int seller_id;
-	int buyer_id;
+	String seller_id;
+	String buyer_id;
+	int status_id;
 	int delivery_term_id;
 	int payment_term_id;
 	int proposal_id;
 	float price;
 	String period_of_delivery;
 	String invoice_date;
-	
-	public Contract() {
-		
-	}
+	int count;
 	public int getContract_id() {
 		return contract_id;
 	}
 	public void setContract_id(int contract_id) {
 		this.contract_id = contract_id;
 	}
-	public int getSeller_id() {
+	public String getSeller_id() {
 		return seller_id;
 	}
-	public void setSeller_id(int seller_id) {
+	public void setSeller_id(String seller_id) {
 		this.seller_id = seller_id;
 	}
-	public int getBuyer_id() {
+	public String getBuyer_id() {
 		return buyer_id;
 	}
-	public void setBuyer_id(int buyer_id) {
+	public void setBuyer_id(String buyer_id) {
 		this.buyer_id = buyer_id;
 	}
-
+	public int getStatus_id() {
+		return status_id;
+	}
+	public void setStatus_id(int status_id) {
+		this.status_id = status_id;
+	}
 	public int getDelivery_term_id() {
 		return delivery_term_id;
 	}
@@ -70,20 +73,31 @@ public class Contract {
 	public void setInvoice_date(String invoice_date) {
 		this.invoice_date = invoice_date;
 	}
-	public Contract(int contract_id, int seller_id, int buyer_id, int delivery_term_id,
-			int payment_term_id, int proposal_id, float price, String period_of_delivery, String invoice_date) {
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
+	public ContractLog(int contract_id, String seller_id, String buyer_id, int status_id, int delivery_term_id,
+			int payment_term_id, int proposal_id, float price, String period_of_delivery, String invoice_date,
+			int count) {
 		super();
 		this.contract_id = contract_id;
 		this.seller_id = seller_id;
 		this.buyer_id = buyer_id;
+		this.status_id = status_id;
 		this.delivery_term_id = delivery_term_id;
 		this.payment_term_id = payment_term_id;
 		this.proposal_id = proposal_id;
 		this.price = price;
 		this.period_of_delivery = period_of_delivery;
 		this.invoice_date = invoice_date;
+		this.count = count;
+	}
+	public ContractLog() {
+	
 	}
 	
 	
-
 }
