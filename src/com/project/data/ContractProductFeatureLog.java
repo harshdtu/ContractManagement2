@@ -1,13 +1,16 @@
 package com.project.data;
 
-public class ContractProduct {
+public class ContractProductFeatureLog {
 
 	int contract_id;
 	int product_id;
-	public ContractProduct(int contract_id, int product_id) {
+	public ContractProductFeatureLog(int contract_id, int product_id) {
 		super();
 		this.contract_id = contract_id;
 		this.product_id = product_id;
+	}
+	public ContractProductFeatureLog() {
+		// TODO Auto-generated constructor stub
 	}
 	public int getContract_id() {
 		return contract_id;

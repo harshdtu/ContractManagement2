@@ -3,9 +3,9 @@ package com.project.Model;
 import java.util.ArrayList;
 
 import com.project.data.ContractProduct;
-import com.project.data.ContractProductLog;
+import com.project.data.ContractProductFeatureLog;
 
-public interface ContractProductDao {
+public interface ContractProductFeatureDao {
 
 	boolean insertContractProduct(ContractProduct contractProduct);
 	//ArrayList<ContractProductLog> selectContractProduct(int contract_id);
