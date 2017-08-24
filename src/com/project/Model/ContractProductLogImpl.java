@@ -15,13 +15,12 @@ public class ContractProductLogImpl implements ContractProductLogDao {
 	@Override
 	public ArrayList<ContractProductFeatureLog> selectContractProduct(int contract_id) {
 		// TODO Auto-generated method stub
-		Statement stmt = null;
+		
 		ArrayList<ContractProductFeatureLog> contractProductLog = new ArrayList<>();
 		ContractProductFeatureLog contractProduct = new ContractProductFeatureLog();
 		try {
-			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("Select * from ContractproductLog where contract_id ="+contract_id);
-			
+			PreparedStatement pstmt = conn.prepareStatement("Select * from ContractproductLog where contract_id ="+contract_id);
+			ResultSet rs = pstmt.executeQuery();
 			while(rs.next())
 			{
 				
