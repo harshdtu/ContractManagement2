@@ -6,61 +6,83 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import com.project.data.ContractFeature;
-import com.project.data.ContractProduct;
 import com.project.data.ContractProductFeatureLog;
 import com.project.database.SQLConnection;
 
 public class ContractProductFeatureImpl implements ContractProductFeatureLogDao {
 	Connection conn = SQLConnection.getConnection();
-	
+
 	@Override
-	public boolean insertContractProductFeature(ArrayList<ContractProductFeatureLog> contract) {
-		// TODO Auto-generated method stub
-			PreparedStatement ps = null;
-			boolean result = false;
-				try {
-					Statement stmt = conn.createStatement();
-					ResultSet rs = stmt.executeQuery("select max(count) from contractProductFeatureLog where contractId="+contract.get(0).getContract_id());
+	public boolean insertContractProductFeature(ArrayList<ContractProductFeatureLog> contractProductFeatureLog) {
+		PreparedStatement ps = null;
+		boolean result = false;
+			try {
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery("select max(version) from contractFeatureProductLog where contractId="+contractProductFeatureLog.get(0).getContractId());
+				
+				for(ContractProductFeatureLog con : contractProductFeatureLog)
+				{
+					ps = conn.prepareStatement("Insert into ContractLog values(?,?,?,?,?,?,?,?,?,?)");
+					ps.setInt(1,con.getContractId());
+					ps.setInt(2,con.getProductId());
+					ps.setInt(3,con.getFeatureId());
+					ps.setInt(4,rs.getInt(1)+1);
 					
-				for(ContractProductFeatureLog c : contract) {
-					ps = conn.prepareStatement("Insert into ContractProduct values(?,?,?,?)");
-					ps.setInt(1,c.getContract_id());
-					ps.setInt(4,c.getProduct_id());
-					ps.setInt(2,c.getFeature_id());
-					ps.setInt(3, rs.getInt(0)+1);
-					}
-				}catch (SQLException e) {
+				}
+					
+			
+			
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally{
+				 try {
+					result = ps.execute();
+				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				finally{
-					 try {
-						result = ps.execute();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				return result;
-				
-		}
-
-	
-
-	@Override
-	public ArrayList<ContractFeature> fetchContractFeature(int contractId) {
-		// TODO Auto-generated method stub
-		return null;
+			}
+			return result;
+			
 	}
 
 	@Override
-	public ArrayList<ContractProduct> fetchContractProduct(int contractId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<ContractProductFeatureLog> fetchContractProductFeature(int contractId, int contractVersion) {
+	ArrayList<ContractProductFeatureLog> contractPFLog = new ArrayList<>();
+	Statement stmt = null;
+	ContractProductFeatureLog contract = new ContractProductFeatureLog();
+	try {
+	stmt = conn.createStatement();
+	ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contractId +"AND version = (Select max(version) from contractLog where contractId ="+ contractId+")" );
+	
+	while(rs.next())
+	{
+		
+		contract.setContractId(rs.getInt(1));
+		contract.setProductId(rs.getInt(2));
+		contract.setFeatureId(rs.getInt(3));
+		contract.setVersion(rs.getInt(4));
+		
+		contractPFLog.add(contract);
+		
+		
 	}
+		
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+	return contractPFLog;
+	
+	
 
 	
+}
 }

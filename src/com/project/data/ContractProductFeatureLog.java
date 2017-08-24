@@ -2,34 +2,42 @@ package com.project.data;
 
 public class ContractProductFeatureLog {
 
-	int contract_id;
-	int product_id;
-	int feature_id;
-	public int getContract_id() {
-		return contract_id;
+	int contractId;
+	int productId;
+	int featureId;
+	int version;
+	public int getVersion() {
+		return version;
 	}
-	public void setContract_id(int contract_id) {
-		this.contract_id = contract_id;
+	public void setVersion(int version) {
+		this.version = version;
 	}
-	public int getProduct_id() {
-		return product_id;
+	public int getContractId() {
+		return contractId;
 	}
-	public void setProduct_id(int product_id) {
-		this.product_id = product_id;
+	public void setContractId(int contract_id) {
+		this.contractId = contract_id;
 	}
-	public int getFeature_id() {
-		return feature_id;
+	public int getProductId() {
+		return productId;
 	}
-	public void setFeature_id(int feature_id) {
-		this.feature_id = feature_id;
+	public void setProductId(int product_id) {
+		this.productId = product_id;
+	}
+	public int getFeatureId() {
+		return featureId;
+	}
+	public void setFeatureId(int feature_id) {
+		this.featureId = feature_id;
 	}
 	
-	public ContractProductFeatureLog(int contract_id, int product_id, int feature_id) {
+	
+	public ContractProductFeatureLog(int contract_id, int product_id, int feature_id, int version) {
 		super();
-		this.contract_id = contract_id;
-		this.product_id = product_id;
-		this.feature_id = feature_id;
-		
+		this.contractId = contract_id;
+		this.productId = product_id;
+		this.featureId = feature_id;
+		this.version = version;
 	}
 	public ContractProductFeatureLog() {
 //		super();

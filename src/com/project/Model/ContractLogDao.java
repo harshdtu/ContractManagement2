@@ -6,8 +6,10 @@ import com.project.data.ContractLog;
 
 
 public interface ContractLogDao {
-	boolean insertContractLog (ContractLog contract);
-	ContractLog selectSingleContract(int contract_id);
-	ArrayList<ContractLog> selectHistoryContract(int contract_id);
+	public boolean insertContractLog (ContractLog contractLog);
+	public ContractLog selectLatestContractLog(int contractId);
+	public ContractLog selectContractLog(int contract_id, int contractVersion);
+	public ArrayList<ContractLog> selectAllContractLogSeller(String sellerId);
+	public ArrayList<ContractLog> selectAllContractLogBuyer(String buyerId);
 
 }

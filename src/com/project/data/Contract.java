@@ -10,11 +10,18 @@ public class Contract {
 	String buyerId;
 	int deliveryTermId;
 	int paymentTermId;
-	Date dateofInvoice;
+	String dateofInvoice;
 	String periodOfDelivery;
-	ArrayList<Product> product ;
+	ArrayList<Product> product;
+	int status; // 0,1,2 IN PROCESS, REJECTED, ACCEPTED
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
 	public Contract(int contract, String sellerId, String buyerId, int deliveryTermId, int paymentTermId,
-			Date dateofInvoice, String periodOfDelivery, ArrayList<Product> product) {
+			String dateofInvoice, String periodOfDelivery, ArrayList<Product> product, int status) {
 		super();
 		this.contract = contract;
 		this.sellerId = sellerId;
@@ -24,6 +31,7 @@ public class Contract {
 		this.dateofInvoice = dateofInvoice;
 		this.periodOfDelivery = periodOfDelivery;
 		this.product = product;
+		this.status = status;
 	}
 	public Contract() {
 		super();
@@ -59,10 +67,10 @@ public class Contract {
 	public void setPaymentTermId(int paymentTermId) {
 		this.paymentTermId = paymentTermId;
 	}
-	public Date getDateofInvoice() {
+	public String getDateofInvoice() {
 		return dateofInvoice;
 	}
-	public void setDateofInvoice(Date dateofInvoice) {
+	public void setDateofInvoice(String dateofInvoice) {
 		this.dateofInvoice = dateofInvoice;
 	}
 	public String getPeriodOfDelivery() {

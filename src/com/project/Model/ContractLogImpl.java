@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import com.project.data.Contract;
 import com.project.data.ContractLog;
 import com.project.database.SQLConnection;
 
@@ -23,19 +22,19 @@ public class ContractLogImpl implements ContractLogDao{
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery("select max(count) from contractLog where contractId="+contract.getContract_id());
 				
-				ps = conn.prepareStatement("Insert into ContractLog values(?,?,?,?,?,?,?,?,?,?)");
-				ps.setInt(1,contract.getContract_id());
-				ps.setString(3,contract.getBuyer_id());
-				ps.setString(2,contract.getSeller_id());
-				ps.setInt(5,contract.getDelivery_term_id());
-				ps.setInt(6,contract.getPayment_term_id());
-				ps.setInt(7,contract.getProposal_id());
-				ps.setInt(4,contract.getStatus_id());
-				ps.setString(10,contract.getInvoice_date());
-				ps.setString(9,contract.getPeriod_of_delivery());
-				ps.setFloat(8,contract.getPrice());
+					ps = conn.prepareStatement("Insert into ContractLog values(?,?,?,?,?,?,?,?,?,?)");
+					ps.setInt(1,contract.getContract_id());
+					ps.setString(3,contract.getBuyer_id());
+					ps.setString(2,contract.getSeller_id());
+					ps.setInt(5,contract.getDelivery_term_id());
+					ps.setInt(6,contract.getPayment_term_id());
+					ps.setInt(7,contract.getProposal_id());
+					ps.setInt(4,contract.getStatus_id());
+					ps.setString(10,contract.getInvoice_date());
+					ps.setString(9,contract.getPeriod_of_delivery());
+					ps.setFloat(8,contract.getPrice());
 				ps.setInt(11,rs.getInt(1) +1 );
-				
+			
 			
 				
 				
@@ -58,14 +57,16 @@ public class ContractLogImpl implements ContractLogDao{
 		
 	}
 
+	
+	
+
 	@Override
-	public ContractLog selectSingleContract(int contract_id) {
-		// TODO Auto-generated method stub
+	public ContractLog selectLatestContractLog(int contractId) {
 		Statement stmt = null;
 		ContractLog contractLog = new ContractLog();
 		try {
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("Select * from contractLog where contract_id ="+contract_id +"AND count = (Select max(count) from contractLog where contractId ="+ contract_id+")" );
+			ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contractId +"AND version = (Select max(version) from contractLog where contractId ="+ contractId+")" );
 			
 			while(rs.next())
 			{
@@ -80,7 +81,7 @@ public class ContractLogImpl implements ContractLogDao{
 				contractLog.setPrice(rs.getFloat(8));
 				contractLog.setPeriod_of_delivery(rs.getString(9));
 				contractLog.setInvoice_date(rs.getString(10));
-				contractLog.setCount(rs.getInt(11));
+				contractLog.setVersion(rs.getInt(11));
 				
 				
 				
@@ -95,15 +96,53 @@ public class ContractLogImpl implements ContractLogDao{
 			
 			return contractLog;
 	}
+
 	@Override
-	public ArrayList<ContractLog> selectHistoryContract(int contract_id) {
-		// TODO Auto-generated method stub
+	public ContractLog selectContractLog(int contract_id, int contractVersion) {
+		Statement stmt = null;
+		ContractLog contractLog = new ContractLog();
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contract_id +"AND version="+contractVersion);
+			
+			while(rs.next())
+			{
+				
+				contractLog.setContract_id(rs.getInt(1));
+				contractLog.setSeller_id(rs.getString(2));
+				contractLog.setBuyer_id(rs.getString(3));
+				contractLog.setStatus_id(rs.getInt(4));
+				contractLog.setDelivery_term_id(rs.getInt(5));
+				contractLog.setPayment_term_id(rs.getInt(6));
+				contractLog.setProposal_id(rs.getInt(7));
+				contractLog.setPrice(rs.getFloat(8));
+				contractLog.setPeriod_of_delivery(rs.getString(9));
+				contractLog.setInvoice_date(rs.getString(10));
+				contractLog.setVersion(rs.getInt(11));
+				
+				
+				
+				
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+			
+			return contractLog;
+	}
+
+
+	@Override
+	public ArrayList<ContractLog> selectAllContractLogSeller(String sellerId) {
 		ArrayList<ContractLog> historyContract = new ArrayList<>();
 		ContractLog contract = new ContractLog();
 		Statement stmt = null;
 		try {
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("Select * from contractLog where contract_id ="+contract_id  );
+			ResultSet rs = stmt.executeQuery("Select * from contractLog where sellerId ="+sellerId  );
 			
 			while(rs.next())
 			{
@@ -118,7 +157,7 @@ public class ContractLogImpl implements ContractLogDao{
 				contract.setPrice(rs.getFloat(8));
 				contract.setPeriod_of_delivery(rs.getString(9));
 				contract.setInvoice_date(rs.getString(10));
-				contract.setCount(rs.getInt(11));
+				contract.setVersion(rs.getInt(11));
 				
 				historyContract.add(contract);
 				
@@ -126,9 +165,48 @@ public class ContractLogImpl implements ContractLogDao{
 				
 				
 			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 			
-			Collections.sort(historyContract, 
-				    Comparator.comparingInt(ContractLog::getCount).reversed());
+			return historyContract;
+	}
+	
+
+	@Override
+	public ArrayList<ContractLog> selectAllContractLogBuyer(String buyerId) {
+		ArrayList<ContractLog> historyContract = new ArrayList<>();
+		ContractLog contract = new ContractLog();
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("Select * from contractLog where buyerId ="+buyerId  );
+			
+			while(rs.next())
+			{
+				
+				contract.setContract_id(rs.getInt(1));
+				contract.setSeller_id(rs.getString(2));
+				contract.setBuyer_id(rs.getString(3));
+				contract.setStatus_id(rs.getInt(4));
+				contract.setDelivery_term_id(rs.getInt(5));
+				contract.setPayment_term_id(rs.getInt(6));
+				contract.setProposal_id(rs.getInt(7));
+				contract.setPrice(rs.getFloat(8));
+				contract.setPeriod_of_delivery(rs.getString(9));
+				contract.setInvoice_date(rs.getString(10));
+				contract.setVersion(rs.getInt(11));
+				
+				historyContract.add(contract);
+				
+				
+				
+				
+			}
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

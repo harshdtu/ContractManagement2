@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Product {
 
 	int id;
-	int productName;
-	int price;
+	String productName;
+	double price;
 	int quantity;
 	int category;
 	ArrayList<Feature> feature;
@@ -14,7 +14,7 @@ public class Product {
 	
 	
 	
-	public Product(int id, int productName, int price, int quantity, int category, ArrayList<Feature> feature) {
+	public Product(int id, String productName, double price, int quantity, int category, ArrayList<Feature> feature) {
 		super();
 		this.id = id;
 		this.productName = productName;
@@ -36,17 +36,17 @@ public class Product {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getProductName() {
+	public String getProductName() {
 		return productName;
 	}
-	public void setProductName(int productName) {
-		this.productName = productName;
+	public void setProductName(String string) {
+		this.productName = string;
 	}
-	public int getPrice() {
+	public double getPrice() {
 		return price;
 	}
-	public void setPrice(int price) {
-		this.price = price;
+	public void setPrice(double d) {
+		this.price = d;
 	}
 	public int getQuantity() {
 		return quantity;

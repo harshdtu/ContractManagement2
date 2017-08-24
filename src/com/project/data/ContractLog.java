@@ -12,7 +12,7 @@ public class ContractLog {
 	float price;
 	String period_of_delivery;
 	String invoice_date;
-	int count;
+	int version;
 	public int getContract_id() {
 		return contract_id;
 	}
@@ -73,15 +73,16 @@ public class ContractLog {
 	public void setInvoice_date(String invoice_date) {
 		this.invoice_date = invoice_date;
 	}
-	public int getCount() {
-		return count;
+	
+	public int getVersion() {
+		return version;
 	}
-	public void setCount(int count) {
-		this.count = count;
+	public void setVersion(int version) {
+		this.version = version;
 	}
 	public ContractLog(int contract_id, String seller_id, String buyer_id, int status_id, int delivery_term_id,
 			int payment_term_id, int proposal_id, float price, String period_of_delivery, String invoice_date,
-			int count) {
+			int version) {
 		super();
 		this.contract_id = contract_id;
 		this.seller_id = seller_id;
@@ -93,7 +94,7 @@ public class ContractLog {
 		this.price = price;
 		this.period_of_delivery = period_of_delivery;
 		this.invoice_date = invoice_date;
-		this.count = count;
+		this.version = version;
 	}
 	public ContractLog() {
 	
