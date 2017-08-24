@@ -58,13 +58,70 @@ try {
 		contract.setProductId(rs.getInt(2));
 		contract.setProductPrice(rs.getDouble(3));
 		contract.setProductQuantity(rs.getInt(4));
-		contract.setContractVersion(version.getInt(1)+1);
+		contract.setContractVersion(contractVersion);
+		contractPrice.add(contract);
 	}
 } catch (SQLException e) {
 	// TODO Auto-generated catch block
 	e.printStackTrace();
 }
-		return null;
+		return contractPrice;
+	}
+
+	@Override
+	public ArrayList<ContractProductPrice> selectLatestContractProductDetails(
+			int contractId) {
+		ArrayList<ContractProductPrice> contractPrice = new ArrayList<>();
+		ContractProductPrice contract = new ContractProductPrice();
+		PreparedStatement pstmt = null;
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet version = stmt.executeQuery("select max(version) from contractPrice where contractId="+contractId);
+			
+			
+			pstmt=conn.prepareStatement("select * from contractPrice where contractId= " + contractId+"AND version ="+version.getInt(1));
+			ResultSet rs= pstmt.executeQuery();
+			while(rs.next()) {
+				
+				contract.setContractId(rs.getInt(1));
+				contract.setProductId(rs.getInt(2));
+				contract.setProductPrice(rs.getDouble(3));
+				contract.setProductQuantity(rs.getInt(4));
+				contract.setContractVersion(version.getInt(1)+1);
+				contractPrice.add(contract);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				return contractPrice;
+	}
+
+	@Override
+	public ArrayList<ContractProductPrice> selectAllContractProductDetails(
+			int contractId) {
+		ArrayList<ContractProductPrice> contractPrice = new ArrayList<>();
+		ContractProductPrice contract = new ContractProductPrice();
+		PreparedStatement pstmt = null;
+		try {
+//			Statement stmt = conn.createStatement();
+			pstmt=conn.prepareStatement("select * from contractPrice where contractId= " + contractId);
+			ResultSet rs= pstmt.executeQuery();
+			while(rs.next()) {
+				
+				contract.setContractId(rs.getInt(1));
+				contract.setProductId(rs.getInt(2));
+				contract.setProductPrice(rs.getDouble(3));
+				contract.setProductQuantity(rs.getInt(4));
+				contract.setContractVersion(rs.getInt(5));
+				
+				contractPrice.add(contract);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				return contractPrice;
 	}
 
 

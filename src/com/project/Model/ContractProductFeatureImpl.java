@@ -58,7 +58,7 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 	ContractProductFeatureLog contract = new ContractProductFeatureLog();
 	try {
 	stmt = conn.createStatement();
-	ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contractId +"AND version = (Select max(version) from contractLog where contractId ="+ contractId+")" );
+	ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contractId +"AND version ="+ contractVersion );
 	
 	while(rs.next())
 	{
@@ -66,7 +66,7 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 		contract.setContractId(rs.getInt(1));
 		contract.setProductId(rs.getInt(2));
 		contract.setFeatureId(rs.getInt(3));
-		contract.setVersion(rs.getInt(4));
+		contract.setVersion(contractVersion);
 		
 		contractPFLog.add(contract);
 		
@@ -85,4 +85,70 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 
 	
 }
+
+	@Override
+	public ArrayList<ContractProductFeatureLog> fetchFinalContractProductFeature(
+			int contractId) {
+		ArrayList<ContractProductFeatureLog> contractPFLog = new ArrayList<>();
+		Statement stmt = null;
+		ContractProductFeatureLog contract = new ContractProductFeatureLog();
+		try {
+		stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contractId +"AND version = (Select max(version) from contractLog where contractId ="+ contractId+")" );
+		
+		while(rs.next())
+		{
+			
+			contract.setContractId(rs.getInt(1));
+			contract.setProductId(rs.getInt(2));
+			contract.setFeatureId(rs.getInt(3));
+			contract.setVersion(rs.getInt(4));
+			
+			contractPFLog.add(contract);
+			
+			
+		}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return contractPFLog;
+		
+	}
+
+	@Override
+	public ArrayList<ContractProductFeatureLog> fetchVersionsContractProductFeature(
+			int contractId) {
+		ArrayList<ContractProductFeatureLog> contractPFLog = new ArrayList<>();
+		Statement stmt = null;
+		ContractProductFeatureLog contract = new ContractProductFeatureLog();
+		try {
+		stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contractId );
+		
+		while(rs.next())
+		{
+			
+			contract.setContractId(rs.getInt(1));
+			contract.setProductId(rs.getInt(2));
+			contract.setFeatureId(rs.getInt(3));
+			contract.setVersion(rs.getInt(4));
+			
+			contractPFLog.add(contract);
+			
+			
+		}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return contractPFLog;
+		
+	}
 }
