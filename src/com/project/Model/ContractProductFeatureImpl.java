@@ -19,15 +19,15 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 		boolean result = false;
 			try {
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("select max(version) from contractFeatureProductLog where contractId="+contractProductFeatureLog.get(0).getContractId());
+				ResultSet rs = stmt.executeQuery("select max(\"version\") from \"contractFeatureProductLog\" where \"contractId\"="+contractProductFeatureLog.get(0).getContractId());
 				
 				for(ContractProductFeatureLog con : contractProductFeatureLog)
 				{
-					ps = conn.prepareStatement("Insert into ContractLog values(?,?,?,?,?,?,?,?,?,?)");
+					ps = conn.prepareStatement("Insert into \"ContractLog\" values(?,?,?,?,?,?,?,?,?,?)");
 					ps.setInt(1,con.getContractId());
-					ps.setInt(2,con.getProductId());
-					ps.setInt(3,con.getFeatureId());
-					ps.setInt(4,rs.getInt(1)+1);
+					ps.setInt(4,con.getProductId());
+					ps.setInt(2,con.getFeatureId());
+					ps.setInt(3,rs.getInt(1)+1);
 					
 				}
 					
@@ -58,15 +58,15 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 	ContractProductFeatureLog contract = new ContractProductFeatureLog();
 	try {
 	stmt = conn.createStatement();
-	ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contractId +"AND version ="+ contractVersion );
+	ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" ="+contractId +"AND \"version\" ="+ contractVersion );
 	
 	while(rs.next())
 	{
 		
 		contract.setContractId(rs.getInt(1));
-		contract.setProductId(rs.getInt(2));
-		contract.setFeatureId(rs.getInt(3));
-		contract.setVersion(contractVersion);
+		contract.setProductId(rs.getInt(4));
+		contract.setFeatureId(rs.getInt(2));
+		contract.setVersion(rs.getInt(3));
 		
 		contractPFLog.add(contract);
 		
@@ -94,15 +94,15 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 		ContractProductFeatureLog contract = new ContractProductFeatureLog();
 		try {
 		stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contractId +"AND version = (Select max(version) from contractLog where contractId ="+ contractId+")" );
+		ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" ="+contractId +"AND \"version\" = (Select max(\"version\") from \"contractLog\" where \"contractId\" ="+ contractId+")" );
 		
 		while(rs.next())
 		{
 			
 			contract.setContractId(rs.getInt(1));
-			contract.setProductId(rs.getInt(2));
-			contract.setFeatureId(rs.getInt(3));
-			contract.setVersion(rs.getInt(4));
+			contract.setProductId(rs.getInt(4));
+			contract.setFeatureId(rs.getInt(2));
+			contract.setVersion(rs.getInt(3));
 			
 			contractPFLog.add(contract);
 			
@@ -127,15 +127,15 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 		ContractProductFeatureLog contract = new ContractProductFeatureLog();
 		try {
 		stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contractId );
+		ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" ="+contractId );
 		
 		while(rs.next())
 		{
 			
 			contract.setContractId(rs.getInt(1));
-			contract.setProductId(rs.getInt(2));
-			contract.setFeatureId(rs.getInt(3));
-			contract.setVersion(rs.getInt(4));
+			contract.setProductId(rs.getInt(4));
+			contract.setFeatureId(rs.getInt(2));
+			contract.setVersion(rs.getInt(3));
 			
 			contractPFLog.add(contract);
 			

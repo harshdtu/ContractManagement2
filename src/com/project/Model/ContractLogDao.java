@@ -13,4 +13,5 @@ public interface ContractLogDao {
 	public ArrayList<ContractLog> selectAllContractLogBuyer(String buyerId);
 	public ArrayList<ContractLog> selectAllContractLogVersions(int contractId);
 
+
 }

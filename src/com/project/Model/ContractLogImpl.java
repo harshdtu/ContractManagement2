@@ -20,9 +20,9 @@ public class ContractLogImpl implements ContractLogDao{
 		boolean result = false;
 			try {
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("select max(count) from contractLog where contractId="+contract.getContract_id());
+				ResultSet rs = stmt.executeQuery("select max(count) from \"contractLog\" where \"contractId\" ="+contract.getContract_id());
 				
-					ps = conn.prepareStatement("Insert into ContractLog values(?,?,?,?,?,?,?,?,?,?)");
+					ps = conn.prepareStatement("Insert into \"contractLog\" values(?,?,?,?,?,?,?,?,?,?)");
 					ps.setInt(1,contract.getContract_id());
 					ps.setString(3,contract.getBuyer_id());
 					ps.setString(2,contract.getSeller_id());
@@ -66,7 +66,7 @@ public class ContractLogImpl implements ContractLogDao{
 		ContractLog contractLog = new ContractLog();
 		try {
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contractId +"AND version = (Select max(version) from contractLog where contractId ="+ contractId+")" );
+			ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" ="+contractId +"AND \"version\" = (Select max(\"version\") from \"contractLog\" where \"contractId\" ="+ contractId+")" );
 			
 			while(rs.next())
 			{
@@ -103,7 +103,7 @@ public class ContractLogImpl implements ContractLogDao{
 		ContractLog contractLog = new ContractLog();
 		try {
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contract_id +"AND version="+contractVersion);
+			ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" ="+contract_id +"AND \"version\" ="+contractVersion);
 			
 			while(rs.next())
 			{
@@ -142,7 +142,7 @@ public class ContractLogImpl implements ContractLogDao{
 		Statement stmt = null;
 		try {
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("Select * from contractLog where sellerId ="+sellerId  );
+			ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"sellerId\" ="+ sellerId  );
 			
 			while(rs.next())
 			{
@@ -183,7 +183,7 @@ public class ContractLogImpl implements ContractLogDao{
 		Statement stmt = null;
 		try {
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("Select * from contractLog where buyerId ="+buyerId  );
+			ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"buyerId\" ="+buyerId  );
 			
 			while(rs.next())
 			{
@@ -226,7 +226,7 @@ public class ContractLogImpl implements ContractLogDao{
 		Statement stmt = null;
 		try {
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contractId  );
+			ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" ="+contractId  );
 			
 			while(rs.next())
 			{
@@ -258,4 +258,46 @@ public class ContractLogImpl implements ContractLogDao{
 			
 			return historyContract;
 	}
+
+
+
+
+//	@Override
+//	public ContractLog selectContractLogStatus(int contract_id) {
+//		ContractLog contract = new ContractLog();
+//		Statement stmt = null;
+//		try {
+//			stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery("Select * from contractLog where contractId ="+contractId  );
+//			
+//			while(rs.next())
+//			{
+//				
+//				contract.setContract_id(rs.getInt(1));
+//				contract.setSeller_id(rs.getString(2));
+//				contract.setBuyer_id(rs.getString(3));
+//				contract.setStatus_id(rs.getInt(4));
+//				contract.setDelivery_term_id(rs.getInt(5));
+//				contract.setPayment_term_id(rs.getInt(6));
+//				contract.setProposal_id(rs.getInt(7));
+//				contract.setPrice(rs.getFloat(8));
+//				contract.setPeriod_of_delivery(rs.getString(9));
+//				contract.setInvoice_date(rs.getString(10));
+//				contract.setVersion(rs.getInt(11));
+//				
+//				
+//				
+//				
+//				
+//				
+//			}
+//
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//			
+//			return contract;
+//	}
 }

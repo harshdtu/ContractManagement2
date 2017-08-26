@@ -18,7 +18,7 @@ public class ContractProductPriceImpl implements ContractProductPriceDAO {
 		PreparedStatement ps = null;
 		boolean result = false;
 			try {
-				ps = conn.prepareStatement("Insert into ContractPrice values(?,?,?,?,?)");
+				ps = conn.prepareStatement("Insert into \"ContractPrice\" values(?,?,?,?,?)");
 				ps.setInt(1,contractProductPrice.getContractId());
 				ps.setInt(2,contractProductPrice.getProductId());
 				ps.setDouble(3,contractProductPrice.getProductPrice());
@@ -47,10 +47,10 @@ ContractProductPrice contract = new ContractProductPrice();
 PreparedStatement pstmt = null;
 try {
 	Statement stmt = conn.createStatement();
-	ResultSet version = stmt.executeQuery("select max(version) from contractPrice where contractId="+contractId);
+	ResultSet version = stmt.executeQuery("select max(\"version\") from \"contractPrice\" where \"contractId\" ="+contractId);
 	
 	
-	pstmt=conn.prepareStatement("select * from contractPrice where contractId= " + contractId+"AND version ="+contractVersion);
+	pstmt=conn.prepareStatement("select * from \"contractPrice\" where \"contractId\" = " + contractId+"AND \"version\" ="+contractVersion);
 	ResultSet rs= pstmt.executeQuery();
 	while(rs.next()) {
 		
@@ -73,13 +73,11 @@ try {
 			int contractId) {
 		ArrayList<ContractProductPrice> contractPrice = new ArrayList<>();
 		ContractProductPrice contract = new ContractProductPrice();
-		PreparedStatement pstmt = null;
+//Statement pstmt = null;
 		try {
-			Statement stmt = conn.createStatement();
-			ResultSet version = stmt.executeQuery("select max(version) from contractPrice where contractId="+contractId);
-			
-			
-			pstmt=conn.prepareStatement("select * from contractPrice where contractId= " + contractId+"AND version ="+version.getInt(1));
+//			Statement stmt = conn.createStatement();
+//			ResultSet version = stmt.executeQuery("select max(\"version\") from \"contractPrice\" where \"contractId\" ="+contractId);
+			PreparedStatement pstmt=conn.prepareStatement("Select * from \"contractPrice\" where \"contractId\"= " + contractId+"AND \"version\" ="+"(Select max(\"version\") from \"contractPrice\" where \"contractId\" ="+contractId+")");
 			ResultSet rs= pstmt.executeQuery();
 			while(rs.next()) {
 				
@@ -87,7 +85,7 @@ try {
 				contract.setProductId(rs.getInt(2));
 				contract.setProductPrice(rs.getDouble(3));
 				contract.setProductQuantity(rs.getInt(4));
-				contract.setContractVersion(version.getInt(1)+1);
+				contract.setContractVersion(rs.getInt(5)+1);
 				contractPrice.add(contract);
 			}
 		} catch (SQLException e) {
@@ -105,7 +103,7 @@ try {
 		PreparedStatement pstmt = null;
 		try {
 //			Statement stmt = conn.createStatement();
-			pstmt=conn.prepareStatement("select * from contractPrice where contractId= " + contractId);
+			pstmt=conn.prepareStatement("select * from \"contractPrice\" where \"contractId\" = " + contractId);
 			ResultSet rs= pstmt.executeQuery();
 			while(rs.next()) {
 				

@@ -68,6 +68,7 @@ public class ContractBusinessLayer {
 		contract.setPaymentTermId(contractLog.getPayment_term_id());
 		contract.setStatus(contractLog.getVersion());
 		ArrayList<ContractProductPrice> contractProductPrice = contractPrice.selectLatestContractProductDetails(contractId);
+		
 		for(ContractProductPrice contractPP : contractProductPrice){
 			
 			product.setId(contractPP.getProductId());
@@ -136,9 +137,8 @@ public class ContractBusinessLayer {
 	
 	public int getContractStatus(int contractId) {
 		
-//		contractLogImpl.selectContractLog(contract_id, contractVersion)
-		int status = 0;
-		return status;
+		ContractLog contract = contractLogImpl.selectLatestContractLog(contractId);
+		return contract.getStatus_id();
 	}
 	
 	public ArrayList<Contract> getAllContractsVersion(int contractId){
@@ -192,6 +192,106 @@ public class ContractBusinessLayer {
 	}
 	
 	public ArrayList<Contract> getAllContractsByUser(String userType, String userId){
-		return new ArrayList<Contract>();
-	}
+		ArrayList<Contract> contract = new ArrayList<>();
+		ArrayList<ContractProductFeatureLog> contractPf = new ArrayList<>();
+		ArrayList<ContractProductPrice> price = new ArrayList<>();
+		ContractProductPrice cp = new ContractProductPrice();
+		ContractProductFeatureLog PFLog = new ContractProductFeatureLog();
+		
+		Contract contractObj = new Contract();
+		ArrayList<Product> contractProduct = new ArrayList<>();
+		ArrayList<Feature> contractFeature = new ArrayList<>();
+		Feature feature = new Feature();
+		Product product = new Product();
+		
+		if(userType == "Seller") {
+			
+			ArrayList<ContractLog> contractLog = contractLogImpl.selectAllContractLogSeller(userId);
+			for(ContractLog cl : contractLog) {
+				
+				contractPf = contractProductFeatureLog.fetchFinalContractProductFeature(cl.getContract_id());
+				 price = contractPrice.selectLatestContractProductDetails(cl.getContract_id());
+			
+				 contractObj.setContract(cl.getContract_id());
+				 contractObj.setBuyerId(cl.getBuyer_id());
+				 contractObj.setDateofInvoice(cl.getInvoice_date());
+				 contractObj.setDeliveryTermId(cl.getDelivery_term_id());
+				 contractObj.setPaymentTermId(cl.getPayment_term_id());
+				 contractObj.setBuyerId(cl.getSeller_id());
+				 
+				 for(ContractProductPrice p : price) {
+					product.setCategory(0);
+					product.setId(p.getProductId());
+					product.setPrice(p.getProductPrice());
+					product.setProductName("Mobile");
+					
+					 
+					 for(ContractProductFeatureLog cpfLog : contractPf) {
+						 feature .setFeatureId(cpfLog.getFeatureId());
+						 feature.setName("ABCD");
+						 
+						 contractFeature.add(feature);
+						 
+					 }
+					 
+					 product.setFeature(contractFeature);
+					contractProduct.add(product);
+				 }
+				 
+				 
+				 
+				 contractObj.setProduct(contractProduct);
+				 contract.add(contractObj);
+				
+			
+			}
+			
+		}
+//		else
+//		{
+//			ArrayList<ContractLog> contractLog = contractLogImpl.selectAllContractLogSeller(userId);
+//			for(ContractLog cl : contractLog) {
+//				
+//				contractPf = contractProductFeatureLog.fetchFinalContractProductFeature(cl.getContract_id());
+//				 price = contractPrice.selectLatestContractProductDetails(cl.getContract_id());
+//			
+//				 contractObj.setContract(cl.getContract_id());
+//				 contractObj.setBuyerId(cl.getBuyer_id());
+//				 contractObj.setDateofInvoice(cl.getInvoice_date());
+//				 contractObj.setDeliveryTermId(cl.getDelivery_term_id());
+//				 contractObj.setPaymentTermId(cl.getPayment_term_id());
+//				 contractObj.setBuyerId(cl.getSeller_id());
+//				 
+//				 for(ContractProductPrice p : price) {
+//					product.setCategory(0);
+//					product.setId(p.getProductId());
+//					product.setPrice(p.getProductPrice());
+//					product.setProductName("Mobile");
+//					
+//					 
+//					 for(ContractProductFeatureLog cpfLog : contractPf) {
+//						 feature .setFeatureId(cpfLog.getFeatureId());
+//						 feature.setName("ABCD");
+//						 
+//						 contractFeature.add(feature);
+//						 
+//					 }
+//					 
+//					 product.setFeature(contractFeature);
+//					contractProduct.add(product);
+//				 }
+//				 
+//				 
+//				 
+//				 contractObj.setProduct(contractProduct);
+//				 contract.add(contractObj);
+//				 return contract;
+//			
+//			}
+//		
+//		}
+			
+			 return contract;
 }
+	}
+
