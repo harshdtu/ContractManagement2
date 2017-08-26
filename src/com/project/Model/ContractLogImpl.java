@@ -21,7 +21,7 @@ public class ContractLogImpl implements ContractLogDao{
 			try {
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery("select max(count) from \"contractLog\" where \"contractId\" ="+contract.getContract_id());
-				
+				int version = rs.getInt(1) +1;
 					ps = conn.prepareStatement("Insert into \"contractLog\" values(?,?,?,?,?,?,?,?,?,?)");
 					ps.setInt(1,contract.getContract_id());
 					ps.setString(3,contract.getBuyer_id());
@@ -33,7 +33,7 @@ public class ContractLogImpl implements ContractLogDao{
 					ps.setString(10,contract.getInvoice_date());
 					ps.setString(9,contract.getPeriod_of_delivery());
 					ps.setFloat(8,contract.getPrice());
-					ps.setInt(11,rs.getInt(1) +1 );
+					ps.setInt(11,version );
 				
 			
 				

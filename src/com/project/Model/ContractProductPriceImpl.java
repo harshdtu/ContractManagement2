@@ -16,14 +16,19 @@ public class ContractProductPriceImpl implements ContractProductPriceDAO {
 	@Override
 	public boolean insertContractProduct(ContractProductPrice contractProductPrice) {
 		PreparedStatement ps = null;
+		
+		
 		boolean result = false;
 			try {
+				Statement stmt = conn.createStatement();
+				ResultSet rrs = stmt.executeQuery("Select max(\"version\") from \"ContractPrice\" where \"contractId\" = "+contractProductPrice.getContractId());
+				int version = rrs.getInt(1) +1;
 				ps = conn.prepareStatement("Insert into \"ContractPrice\" values(?,?,?,?,?)");
 				ps.setInt(1,contractProductPrice.getContractId());
 				ps.setInt(2,contractProductPrice.getProductId());
 				ps.setDouble(3,contractProductPrice.getProductPrice());
 				ps.setInt(4,contractProductPrice.getProductQuantity());
-				ps.setInt(5,contractProductPrice.getContractVersion());
+				ps.setInt(5,version);
 			}catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

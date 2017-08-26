@@ -20,14 +20,14 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 			try {
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery("select max(\"version\") from \"contractFeatureProductLog\" where \"contractId\"="+contractProductFeatureLog.get(0).getContractId());
-				
+				int version = rs.getInt(1) + 1;
 				for(ContractProductFeatureLog con : contractProductFeatureLog)
 				{
 					ps = conn.prepareStatement("Insert into \"ContractLog\" values(?,?,?,?,?,?,?,?,?,?)");
 					ps.setInt(1,con.getContractId());
 					ps.setInt(4,con.getProductId());
 					ps.setInt(2,con.getFeatureId());
-					ps.setInt(3,rs.getInt(1)+1);
+					ps.setInt(3,version);
 					
 				}
 					
