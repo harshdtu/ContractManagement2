@@ -12,8 +12,12 @@ public class Contract {
 	int paymentTermId;
 	String dateofInvoice;
 	String periodOfDelivery;
-	ArrayList<Product> product;
+	ArrayList<Product> product = new ArrayList<>();
 	int status; // 0,1,2 IN PROCESS, REJECTED, ACCEPTED
+	
+	public void addProduct(Product p) {
+		product.add(p);
+	}
 	public int getStatus() {
 		return status;
 	}

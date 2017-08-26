@@ -9,9 +9,11 @@ public class Product {
 	double price;
 	int quantity;
 	int category;
-	ArrayList<Feature> feature;
+	ArrayList<Feature> feature = new ArrayList<>();
 	
-	
+	public void addFeature(Feature f) {
+		feature.add(f);
+	}
 	
 	
 	public Product(int id, String productName, double price, int quantity, int category, ArrayList<Feature> feature) {
