@@ -36,8 +36,7 @@ public class ContractResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public boolean postContract(Contract contract) {
-		
-		return true;
+		return contractBL.insertContractLog(contract);
 	}
 	
 	// Get the latest contract

@@ -20,7 +20,6 @@ public class ContractBusinessLayer {
 	
 	public boolean insertContractLog(Contract contract){
 		ContractLog contractLog = new ContractLog();
-		
 		ArrayList<Feature> Contractfeature = new ArrayList<>();
 		ArrayList<Product> ContractProduct = new ArrayList<> ();
 		ContractProductPrice price = new ContractProductPrice();

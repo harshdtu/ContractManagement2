@@ -9,6 +9,7 @@ import com.project.restClient.pojo.SelectedProposalProduct;
 import com.project.restClient.pojo.SelectedProposalProductFeature;
 
 public class DraftContractBL {
+	// Convert selectedProposal received from team B to Contract.
 	private Contract mapContractProposal(SelectedProposal proposal) {
 		Contract contract = new Contract();
 		contract.setStatus(0);
