@@ -11,6 +11,13 @@ public class Product {
 	int category;
 	ArrayList<Feature> feature = new ArrayList<>();
 	
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", productName=" + productName + ", price=" + price + ", quantity=" + quantity
+				+ ", category=" + category + ", feature=" + feature + "]";
+	}
+
+
 	public void addFeature(Feature f) {
 		feature.add(f);
 	}

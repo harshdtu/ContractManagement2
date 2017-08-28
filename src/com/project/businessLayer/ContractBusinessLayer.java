@@ -18,65 +18,65 @@ public class ContractBusinessLayer {
 	ContractProductPriceImpl contractPrice = new ContractProductPriceImpl();
 	
 	
-	public boolean insertContractLog(Contract contract){
-		ContractLog contractLog = new ContractLog();
-		ArrayList<Feature> Contractfeature = new ArrayList<>();
-		ArrayList<Product> ContractProduct = new ArrayList<> ();
-		ContractProductPrice price = new ContractProductPrice();
-		ArrayList<ContractProductFeatureLog> cfLog = new ArrayList<>();
-		ContractProductFeatureLog pfObj = new ContractProductFeatureLog();
-		Feature feature = new Feature();
-		boolean resultContractLog = false;
-		boolean resultContractProduct = false;
-		boolean resultContractPFLog = false;
-		contractLog.setBuyer_id(contract.getBuyerId());
-		contractLog.setSeller_id(contract.getSellerId());
-		contractLog.setContract_id(contract.getContract());
-		contractLog.setDelivery_term_id(contract.getDeliveryTermId());
-		contractLog.setPayment_term_id(contract.getPaymentTermId());
-		contractLog.setInvoice_date(contract.getDateofInvoice());
-		contractLog.setPeriod_of_delivery(contract.getPeriodOfDelivery());
-		resultContractLog = contractLogImpl.insertContractLog(contractLog);
-		ContractProduct = contract.getProduct();
-		for (Product p : ContractProduct){
-			price.setContractId(contract.getContract());
-			price.setContractVersion(0); // TO BE UPDATED IN METHOD
-			price.setProductId(p.getId());
-			price.setProductPrice(p.getPrice());
-			price.setProductQuantity(p.getQuantity());
-			
-			resultContractProduct = contractPrice.insertContractProduct(price);
-			Contractfeature.addAll(p.getFeature());
-			for (Feature f: Contractfeature){
-				
-//				if(resultContractProduct && resultContractLog){
-					
-					pfObj.setContractId(contract.getContract());
-					pfObj.setProductId(p.getId());
-					pfObj.setFeatureId(f.getFeatureId());
-					pfObj.setVersion(0);
-					
-					cfLog.add(pfObj);
-//				}
-//				else{
-//					System.out.print("Error in insertion");
-//				}
-			}
-			
-			
-			
-			
-		}
-		 resultContractPFLog = contractProductFeatureLog.insertContractProductFeature(cfLog);
-		
-		 if(resultContractPFLog && resultContractLog && resultContractProduct){
-			 return true;
-		 }else
-		 {
-			 return false;
-		 }
-		
-	}
+//	public boolean insertContractLog(Contract contract){
+//		ContractLog contractLog = new ContractLog();
+//		ArrayList<Feature> Contractfeature = new ArrayList<>();
+//		ArrayList<Product> ContractProduct = new ArrayList<> ();
+//		ContractProductPrice price = new ContractProductPrice();
+//		ArrayList<ContractProductFeatureLog> cfLog = new ArrayList<>();
+//		ContractProductFeatureLog pfObj = new ContractProductFeatureLog();
+//		Feature feature = new Feature();
+//		boolean resultContractLog = false;
+//		boolean resultContractProduct = false;
+//		boolean resultContractPFLog = false;
+//		contractLog.setBuyer_id(contract.getBuyerId());
+//		contractLog.setSeller_id(contract.getSellerId());
+//		contractLog.setContract_id(contract.getContract());
+//		contractLog.setDelivery_term_id(contract.getDeliveryTermId());
+//		contractLog.setPayment_term_id(contract.getPaymentTermId());
+//		contractLog.setInvoice_date(contract.getDateofInvoice());
+//		contractLog.setPeriod_of_delivery(contract.getPeriodOfDelivery());
+//		resultContractLog = contractLogImpl.insertContractLog(contractLog);
+//		ContractProduct = contract.getProduct();
+//		for (Product p : ContractProduct){
+//			price.setContractId(contract.getContract());
+//			price.setContractVersion(0); // TO BE UPDATED IN METHOD
+//			price.setProductId(p.getId());
+//			price.setProductPrice(p.getPrice());
+//			price.setProductQuantity(p.getQuantity());
+//			
+//			resultContractProduct = contractPrice.insertContractProduct(price);
+//			Contractfeature.addAll(p.getFeature());
+//			for (Feature f: Contractfeature){
+//				
+////				if(resultContractProduct && resultContractLog){
+//					
+//					pfObj.setContractId(contract.getContract());
+//					pfObj.setProductId(p.getId());
+//					pfObj.setFeatureId(f.getFeatureId());
+//					pfObj.setVersion(0);
+//					
+//					cfLog.add(pfObj);
+////				}
+////				else{
+////					System.out.print("Error in insertion");
+////				}
+//			}
+//			
+//			
+//			
+//			
+//		}
+//		 resultContractPFLog = contractProductFeatureLog.insertContractProductFeature(cfLog);
+//		
+//		 if(resultContractPFLog && resultContractLog && resultContractProduct){
+//			 return true;
+//		 }else
+//		 {
+//			 return false;
+//		 }
+//		
+//	}
 	
 	public Contract getSpecificContract(int contractId, int contractVersion) {
 		ArrayList<Feature> Contractfeature = new ArrayList<>();
@@ -153,6 +153,7 @@ public class ContractBusinessLayer {
 	
 	public boolean insertContract(Contract contract) {
 		
+		
 		ContractLog contractLog = new ContractLog();
 		ArrayList<ContractProductFeatureLog> contractPFLog = new ArrayList<ContractProductFeatureLog>();
 		ContractProductPrice price = new ContractProductPrice();
@@ -164,20 +165,24 @@ public class ContractBusinessLayer {
 		contractLog.setInvoice_date(contract.getDateofInvoice());
 		contractLog.setPeriod_of_delivery(contract.getPeriodOfDelivery());
 		contractLog.setStatus_id(contract.getStatus());
-		contractLogImpl.insertContractLog(contractLog);
+	 contractLogImpl.insertContractLog(contractLog);
+
+		System.out.println("Check name" + contract.getBuyerId());
 		
-	
 		ArrayList<Product> product = contract.getProduct();
 		for(Product contractProduct:product){
 			ContractProductFeatureLog PFLog =  new ContractProductFeatureLog();
 			PFLog.setContractId(contract.getContract());
 			PFLog.setProductId(contractProduct.getId());
 			PFLog.setVersion(0);//get version _TODO;
+	
 			
 			ArrayList<Feature> feature = contractProduct.getFeature();
 			for(Feature ft : feature){
 			PFLog.setFeatureId(ft.getFeatureId());
 			contractPFLog.add(PFLog);
+			
+			System.out.println("Check featuree" + ft.getFeatureId());
 		
 			}
 			
@@ -186,7 +191,11 @@ public class ContractBusinessLayer {
 			price.setProductPrice(contractProduct.getPrice());
 			price.setProductQuantity(contractProduct.getQuantity());
 			price.setContractVersion(0);//set contract version
-			contractPrice.insertContractProduct(price );
+			
+			System.out.println("Check pp" + contractProduct.getQuantity());
+			 contractPrice.insertContractProduct(price );
+			
+			
 		}
 		contractProductFeatureLog.insertContractProductFeature(contractPFLog);
 		

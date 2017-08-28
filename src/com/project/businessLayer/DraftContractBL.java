@@ -1,5 +1,9 @@
 package com.project.businessLayer;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.project.data.Contract;
 import com.project.data.Feature;
 import com.project.data.Product;
@@ -16,6 +20,12 @@ public class DraftContractBL {
 		// buyid value hard-coded
 		contract.setBuyerId("buyer@com");
 		// proposals team returning integer as seller id
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
+		
+		contract.setDateofInvoice(dateFormat.format(date));
+		contract.setPeriodOfDelivery("10 days from invoice");
 		contract.setSellerId(proposal.getBidsellerid().toString());
 		contract.setDeliveryTermId(proposal.getDTermId());
 		contract.setPaymentTermId(proposal.getPTermId());

@@ -11,49 +11,67 @@ import com.project.data.ContractProductFeatureLog;
 import com.project.database.SQLConnection;
 
 public class ContractProductFeatureImpl implements ContractProductFeatureLogDao {
-	Connection conn = SQLConnection.getConnection();
+	
 
 	@Override
 	public boolean insertContractProductFeature(ArrayList<ContractProductFeatureLog> contractProductFeatureLog) {
+		Connection conn = SQLConnection.getConnection();
 		PreparedStatement ps = null;
 		boolean result = false;
+		int version=0;
 			try {
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("select max(\"version\") from \"contractFeatureProductLog\" where \"contractId\"="+contractProductFeatureLog.get(0).getContractId());
-				
+				ResultSet rs = stmt.executeQuery("select max(\"version\") from \"contractProductFeatureLog\" where \"contractId\"="+contractProductFeatureLog.get(0).getContractId());
+				while(rs.next()) {
+					version =rs.getInt(1)+1;
+				}
 				for(ContractProductFeatureLog con : contractProductFeatureLog)
 				{
-					ps = conn.prepareStatement("Insert into \"ContractLog\" values(?,?,?,?,?,?,?,?,?,?)");
+					ps = conn.prepareStatement("Insert into \"contractProductFeatureLog\" values(?,?,?,?)",ResultSet.TYPE_SCROLL_SENSITIVE, 
+			                ResultSet.CONCUR_UPDATABLE);
 					ps.setInt(1,con.getContractId());
 					ps.setInt(4,con.getProductId());
 					ps.setInt(2,con.getFeatureId());
-					ps.setInt(3,rs.getInt(1)+1);
+					ps.setInt(3,version);
+					result = ps.execute();
+					int res = ps.executeUpdate();
 					
+					if(res==0) {
+						
+						System.out.println("rrrrr pf log  " +res);
+						result=false;
+					}else
+					{
+						System.out.println("rrrrr pflog  " + res);
+						result= true;
+					}
 				}
 					
-			
-			
 				
+				
+//				conn.close();
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			finally{
-				 try {
-					result = ps.execute();
+			}finally {
+				try {
+					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
+			
+			
 			return result;
 			
 	}
 
 	@Override
 	public ArrayList<ContractProductFeatureLog> fetchContractProductFeature(int contractId, int contractVersion) {
-	ArrayList<ContractProductFeatureLog> contractPFLog = new ArrayList<>();
+		Connection conn = SQLConnection.getConnection();
+ArrayList<ContractProductFeatureLog> contractPFLog = new ArrayList<>();
 	Statement stmt = null;
 	ContractProductFeatureLog contract = new ContractProductFeatureLog();
 	try {
@@ -72,12 +90,21 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 		
 		
 	}
+//	conn.close();
 		
 		
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
+	}finally {
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
 	
 	return contractPFLog;
 	
@@ -89,6 +116,7 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 	@Override
 	public ArrayList<ContractProductFeatureLog> fetchFinalContractProductFeature(
 			int contractId) {
+		Connection conn = SQLConnection.getConnection();
 		ArrayList<ContractProductFeatureLog> contractPFLog = new ArrayList<>();
 		Statement stmt = null;
 		ContractProductFeatureLog contract = new ContractProductFeatureLog();
@@ -108,12 +136,20 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 			
 			
 		}
-			
+//			conn.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
 		
 		return contractPFLog;
 		
@@ -122,6 +158,7 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 	@Override
 	public ArrayList<ContractProductFeatureLog> fetchVersionsContractProductFeature(
 			int contractId) {
+		Connection conn = SQLConnection.getConnection();
 		ArrayList<ContractProductFeatureLog> contractPFLog = new ArrayList<>();
 		Statement stmt = null;
 		ContractProductFeatureLog contract = new ContractProductFeatureLog();
@@ -141,11 +178,18 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 			
 			
 		}
-			
+//			conn.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		return contractPFLog;

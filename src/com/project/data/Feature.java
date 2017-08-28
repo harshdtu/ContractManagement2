@@ -23,6 +23,10 @@ public Feature(int featureId, String name) {
 public Feature() {
 	super();
 }
+@Override
+public String toString() {
+	return "Feature [featureId=" + featureId + ", name=" + name + "]";
+}
 
 
 }

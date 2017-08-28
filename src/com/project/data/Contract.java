@@ -9,6 +9,13 @@ public class Contract {
 	String sellerId;
 	String buyerId;
 	int deliveryTermId;
+	@Override
+	public String toString() {
+		return "Contract [contract=" + contract + ", sellerId=" + sellerId + ", buyerId=" + buyerId
+				+ ", deliveryTermId=" + deliveryTermId + ", paymentTermId=" + paymentTermId + ", dateofInvoice="
+				+ dateofInvoice + ", periodOfDelivery=" + periodOfDelivery + ", product=" + product + ", status="
+				+ status + "]";
+	}
 	int paymentTermId;
 	String dateofInvoice;
 	String periodOfDelivery;
