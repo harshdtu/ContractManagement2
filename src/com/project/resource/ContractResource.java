@@ -12,6 +12,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.project.businessLayer.ContractBusinessLayer;
+import com.project.businessLayer.DraftContractBL;
 import com.project.data.Contract;
 
 
@@ -21,12 +22,22 @@ public class ContractResource {
 	public ContractResource(){
 		contractBL = new ContractBusinessLayer();
 	}
+	
+	@Path("/draft/{proposalId}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Contract createDraftContract(@PathParam("proposalId") int proposalId) {
+		DraftContractBL draftContractBL = new DraftContractBL();
+		Contract contract = draftContractBL.getDraftContract(proposalId);
+		return contract;
+	}
+	
 	// Inserting a new contract.
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public boolean postContract(Contract contract) {
-		
-		return true;
+		System.out.println(contract);
+		return contractBL.insertContract(contract);
 	}
 	
 	// Get the latest contract

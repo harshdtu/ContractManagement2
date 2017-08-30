@@ -9,9 +9,18 @@ public class Product {
 	double price;
 	int quantity;
 	int category;
-	ArrayList<Feature> feature;
+	ArrayList<Feature> feature = new ArrayList<>();
 	
-	
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", productName=" + productName + ", price=" + price + ", quantity=" + quantity
+				+ ", category=" + category + ", feature=" + feature + "]";
+	}
+
+
+	public void addFeature(Feature f) {
+		feature.add(f);
+	}
 	
 	
 	public Product(int id, String productName, double price, int quantity, int category, ArrayList<Feature> feature) {

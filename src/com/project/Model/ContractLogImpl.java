@@ -13,44 +13,69 @@ import com.project.data.ContractLog;
 import com.project.database.SQLConnection;
 
 public class ContractLogImpl implements ContractLogDao{
-	Connection conn = SQLConnection.getConnection();
+
 	
 	public boolean insertContractLog (ContractLog contract){
+		Connection conn = SQLConnection.getConnection();
 		PreparedStatement ps = null;
-		boolean result = false;
+		int result = 0;
+		boolean res =false;
+		int version=0;
 			try {
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("select max(count) from \"contractLog\" where \"contractId\" ="+contract.getContract_id());
-				int version = rs.getInt(1) +1;
-					ps = conn.prepareStatement("Insert into \"contractLog\" values(?,?,?,?,?,?,?,?,?,?)");
+
+				ResultSet rs = stmt.executeQuery("select max(\"version\") from \"contractLog\" where \"contractId\" ="+contract.getContract_id());
+			while(rs.next())
+			{
+				 version = rs.getInt(1) +1;
+			}
+					ps = conn.prepareStatement("Insert into \"contractLog\" values(?,?,?,?,?,?,?,?,?,?,?)",ResultSet.TYPE_SCROLL_SENSITIVE, 
+			                ResultSet.CONCUR_UPDATABLE);
+
 					ps.setInt(1,contract.getContract_id());
-					ps.setString(3,contract.getBuyer_id());
 					ps.setString(2,contract.getSeller_id());
+					ps.setString(3,contract.getBuyer_id());
+					ps.setInt(4,contract.getStatus_id());
 					ps.setInt(5,contract.getDelivery_term_id());
 					ps.setInt(6,contract.getPayment_term_id());
 					ps.setInt(7,contract.getProposal_id());
-					ps.setInt(4,contract.getStatus_id());
-					ps.setString(10,contract.getInvoice_date());
-					ps.setString(9,contract.getPeriod_of_delivery());
 					ps.setFloat(8,contract.getPrice());
+					ps.setString(9,contract.getPeriod_of_delivery());
+					java.sql.Date sqlDate = java.sql.Date.valueOf(contract.getInvoice_date());
+					ps.setDate(10,sqlDate);
 					ps.setInt(11,version );
-				
+					result = ps.executeUpdate();
+					
+					if(result==0) {
+						
+						System.out.println("rrrrr  " +result);
+						res=false;
+					}else
+					{
+						System.out.println("rrrrr  " + result);
+						res= true;
+					}
+
 			
 				
-				
+					
+//					conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			finally{
-				 try {
-					result = ps.execute();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			return result;
+				
+	}
+//		finally {
+//			try {
+////				conn.close();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//			
+//			
+			return res;
 			
 		
 		
@@ -62,8 +87,10 @@ public class ContractLogImpl implements ContractLogDao{
 
 	@Override
 	public ContractLog selectLatestContractLog(int contractId) {
+		Connection conn = SQLConnection.getConnection();
 		Statement stmt = null;
 		ContractLog contractLog = new ContractLog();
+	
 		try {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" ="+contractId +"AND \"version\" = (Select max(\"version\") from \"contractLog\" where \"contractId\" ="+ contractId+")" );
@@ -91,14 +118,21 @@ public class ContractLogImpl implements ContractLogDao{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}finally {
 		
-			
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 			return contractLog;
 	}
 
 	@Override
 	public ContractLog selectContractLog(int contract_id, int contractVersion) {
+		Connection conn = SQLConnection.getConnection();
 		Statement stmt = null;
 		ContractLog contractLog = new ContractLog();
 		try {
@@ -128,7 +162,15 @@ public class ContractLogImpl implements ContractLogDao{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
 		
 			
 			return contractLog;
@@ -137,6 +179,7 @@ public class ContractLogImpl implements ContractLogDao{
 
 	@Override
 	public ArrayList<ContractLog> selectAllContractLogSeller(String sellerId) {
+		Connection conn = SQLConnection.getConnection();
 		ArrayList<ContractLog> historyContract = new ArrayList<>();
 		ContractLog contract = new ContractLog();
 		Statement stmt = null;
@@ -166,10 +209,19 @@ public class ContractLogImpl implements ContractLogDao{
 				
 			}
 
+//			conn.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
 		
 			
 			return historyContract;
@@ -178,6 +230,7 @@ public class ContractLogImpl implements ContractLogDao{
 
 	@Override
 	public ArrayList<ContractLog> selectAllContractLogBuyer(String buyerId) {
+		Connection conn = SQLConnection.getConnection();
 		ArrayList<ContractLog> historyContract = new ArrayList<>();
 		ContractLog contract = new ContractLog();
 		Statement stmt = null;
@@ -206,11 +259,21 @@ public class ContractLogImpl implements ContractLogDao{
 				
 				
 			}
+			
+//			conn.close();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
 		
 			
 			return historyContract;
@@ -221,6 +284,7 @@ public class ContractLogImpl implements ContractLogDao{
 
 	@Override
 	public ArrayList<ContractLog> selectAllContractLogVersions(int contractId) {
+		Connection conn = SQLConnection.getConnection();
 		ArrayList<ContractLog> historyContract = new ArrayList<>();
 		ContractLog contract = new ContractLog();
 		Statement stmt = null;
@@ -249,11 +313,21 @@ public class ContractLogImpl implements ContractLogDao{
 				
 				
 			}
+			
+//			conn.close();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
 		
 			
 			return historyContract;

@@ -9,11 +9,22 @@ public class Contract {
 	String sellerId;
 	String buyerId;
 	int deliveryTermId;
+	@Override
+	public String toString() {
+		return "Contract [contract=" + contract + ", sellerId=" + sellerId + ", buyerId=" + buyerId
+				+ ", deliveryTermId=" + deliveryTermId + ", paymentTermId=" + paymentTermId + ", dateofInvoice="
+				+ dateofInvoice + ", periodOfDelivery=" + periodOfDelivery + ", product=" + product + ", status="
+				+ status + "]";
+	}
 	int paymentTermId;
 	String dateofInvoice;
 	String periodOfDelivery;
-	ArrayList<Product> product;
+	ArrayList<Product> product = new ArrayList<>();
 	int status; // 0,1,2 IN PROCESS, REJECTED, ACCEPTED
+	
+	public void addProduct(Product p) {
+		product.add(p);
+	}
 	public int getStatus() {
 		return status;
 	}
