@@ -20,34 +20,30 @@ public class ContractProductPriceImpl implements ContractProductPriceDAO {
 		int version=0;
 		 Connection conn = SQLConnection.getConnection();
 			try {
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("select max(\"version\") from \"contractPrice\" where \"contractId\"="+contractProductPrice.getContractId());
-				while(rs.next()) {
-					version =rs.getInt(1)+1;
-				}
+//				Statement stmt = conn.createStatement();
+//
+//				ResultSet rs = stmt.executeQuery("select max(\"version\") from \"contractPrice\" where \"contractId\"="+contractProductPrice.getContractId());
+//				while(rs.next()) {
+//					version =rs.getInt(1)+1;
+//				}
+				
+				System.out.println("versionnn price" + contractProductPrice.getContractVersion());
 				
 				ps = conn.prepareStatement("Insert into \"contractPrice\" values(?,?,?,?,?)",ResultSet.TYPE_SCROLL_SENSITIVE, 
 		                ResultSet.CONCUR_UPDATABLE);
+
 				ps.setInt(1,contractProductPrice.getContractId());
 				ps.setInt(2,contractProductPrice.getProductId());
 				ps.setDouble(3,contractProductPrice.getProductPrice());
 				ps.setInt(4,contractProductPrice.getProductQuantity());
 				ps.setInt(5,version);
-//				result = ps.execute();
 				
+				System.out.println("COntract Product price" +contractProductPrice.toString());
+				result = ps.execute();
 				
-int res = ps.executeUpdate();
+				conn.close();
 				
-				if(res==0) {
-					
-					System.out.println("rrrrr price  " +res);
-					result=false;
-				}else
-				{
-					System.out.println("rrrrr price  " + res);
-					result= true;
-				}
-//				conn.close();
+
 			}catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

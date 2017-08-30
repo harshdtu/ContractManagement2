@@ -1,6 +1,12 @@
 package com.project.data;
 
 public class ContractProductPrice {
+	@Override
+	public String toString() {
+		return "ContractProductPrice [contractId=" + contractId + ", contractVersion=" + contractVersion
+				+ ", productId=" + productId + ", productPrice=" + productPrice + ", productQuantity=" + productQuantity
+				+ "]";
+	}
 	int contractId;
 	int contractVersion;
 	int productId;

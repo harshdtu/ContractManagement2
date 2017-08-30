@@ -2,6 +2,11 @@ package com.project.data;
 
 public class ContractProductFeatureLog {
 
+	@Override
+	public String toString() {
+		return "ContractProductFeatureLog [contractId=" + contractId + ", productId=" + productId + ", featureId="
+				+ featureId + ", version=" + version + "]";
+	}
 	int contractId;
 	int productId;
 	int featureId;
