@@ -176,15 +176,20 @@ public class ContractBusinessLayer {
 		ArrayList<Contract> contractList = new ArrayList<>();
 		ArrayList<Product> contractProduct = new ArrayList<>();
 		ArrayList<Feature> contractFeature = new ArrayList<>();
-		Feature feature = new Feature();
-		Product product = new Product();
-		Contract contract = new Contract();
+		Contract contract= null;
 		ArrayList<ContractLog> contractLog = contractLogImpl.selectAllContractLogVersions(contractId);
 		ArrayList<ContractProductFeatureLog> contractPFLog = contractProductFeatureLog
 				.fetchVersionsContractProductFeature(contractId);
 		ArrayList<ContractProductPrice> contractPPrice = contractPrice.selectAllContractProductDetails(contractId);
+		for (ContractProductPrice price : contractPPrice) {
+			System.out.println("****************************");
+			System.out.println("PRICe" + price);
+			System.out.println("****************************");
+		}
+		
 		for (ContractLog cl : contractLog) {
-
+			
+			contract = new Contract();
 			contract.setBuyerId(cl.getBuyer_id());
 			contract.setContract(cl.getContract_id());
 			contract.setDateofInvoice(cl.getInvoice_date());
@@ -192,8 +197,11 @@ public class ContractBusinessLayer {
 			contract.setPaymentTermId(cl.getPayment_term_id());
 			contract.setSellerId(cl.getSeller_id());
 			contract.setStatus(cl.getStatus_id());
+			
+		
 			for (ContractProductPrice price : contractPPrice) {
-
+				
+				Product product = new Product();
 				product.setPrice(price.getProductPrice());
 				product.setId(price.getProductId());
 				product.setProductName("Mobile");// TODO fetch from api
@@ -201,15 +209,19 @@ public class ContractBusinessLayer {
 				product.setQuantity(price.getProductQuantity());
 
 				for (ContractProductFeatureLog pfLog : contractPFLog) {
-					if (pfLog.getProductId() == price.getProductId()) {
+					Feature feature = new Feature();
+					System.out.println("****************************");
+					System.out.println("PFLOG" + pfLog);
+					System.out.println("****************************");
+
 						feature.setFeatureId(pfLog.getFeatureId());
 						feature.setName("gorilla screen");// TODO fetch from api
-
+						System.out.println("############################");
+						System.out.println("FEATURE" + feature);
+						System.out.println("#############################");
 						contractFeature.add(feature);
-
-					} else {
-						continue;
-					}
+						
+						
 					product.setFeature(contractFeature);
 				}
 				contractProduct.add(product);
@@ -217,8 +229,11 @@ public class ContractBusinessLayer {
 			contract.setProduct(contractProduct);
 			contractList.add(contract);
 		}
+		
+
 		return contractList;
 	}
+
 
 	public ArrayList<Contract> getAllContractsByUser(String userType, String userId) {
 		ArrayList<Contract> contract = new ArrayList<>();

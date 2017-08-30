@@ -139,6 +139,8 @@ try {
 				contract.setContractVersion(rs.getInt(5));
 				
 				contractPrice.add(contract);
+				
+				System.out.println("Check " + contract);
 			}
 //			conn.close();
 		} catch (SQLException e) {
