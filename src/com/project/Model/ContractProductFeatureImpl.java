@@ -49,8 +49,7 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 					result = ps.execute();
 					
 
-					System.out.println("Details " + con.getContractId() +" pro id" + con.getProductId()+" feature id "+ con.getFeatureId() +"version "+ version);
-
+					
 					result = true;
 				}
 					

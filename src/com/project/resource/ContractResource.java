@@ -61,7 +61,7 @@ public class ContractResource {
 	@Path("/{contractId}/all")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Contract> getAllContractsVersion(@PathParam("contractId") int contractId){
-		return new ArrayList<Contract>();
+		return contractBL.getAllContractsVersion(contractId);
 	}
 	
 	
@@ -71,7 +71,7 @@ public class ContractResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	// type = seller or buyer
 	public ArrayList<Contract> getContractsByUser(@QueryParam("type") String userType, @PathParam("userId") String userId){
-		return new ArrayList<Contract>();
+		return contractBL.getAllContractsByUser(userType, userId);
 	}
 	
 	// Get status of a contract

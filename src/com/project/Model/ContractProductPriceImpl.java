@@ -36,7 +36,7 @@ public class ContractProductPriceImpl implements ContractProductPriceDAO {
 				ps.setInt(2,contractProductPrice.getProductId());
 				ps.setDouble(3,contractProductPrice.getProductPrice());
 				ps.setInt(4,contractProductPrice.getProductQuantity());
-				ps.setInt(5,version);
+				ps.setInt(5,contractProductPrice.getContractVersion());
 				
 				System.out.println("COntract Product price" +contractProductPrice.toString());
 				result = ps.execute();

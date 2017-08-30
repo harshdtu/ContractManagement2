@@ -114,7 +114,22 @@ public class ContractBusinessLayer {
 		contractLog.setPeriod_of_delivery(contract.getPeriodOfDelivery());
 		contractLog.setStatus_id(contract.getStatus());
 		contractLogImpl.insertContractLog(contractLog);
-
+		Connection conn = SQLConnection.getConnection();
+		try {
+			Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			ResultSet rs;
+			rs = stmt.executeQuery("select max(\"version\") from \"contractPrice\" where \"contractId\"="+contract.getContract());
+			if(rs.first()) {
+					version=rs.getInt(1)+1;
+					System.out.println("ALL VERSION Price" + version);
+				}
+				
+			
+		conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		ArrayList<Product> product = contract.getProduct();
 		for (Product contractProduct : product) {
 			// get version _TODO;
@@ -128,7 +143,7 @@ public class ContractBusinessLayer {
 				PFLog.setVersion(0);
 				PFLog.setFeatureId(ft.getFeatureId());
 				contractPFLog.add(PFLog);
-				System.out.println("Check featuree   " + PFLog.getFeatureId() + "  product " + PFLog.getProductId());
+//				System.out.println("Check feature   " + PFLog.getFeatureId() + "  product " + PFLog.getProductId());
 
 			}
 
@@ -136,38 +151,15 @@ public class ContractBusinessLayer {
 			price.setProductId(contractProduct.getId());
 			price.setProductPrice(contractProduct.getPrice());
 			price.setProductQuantity(contractProduct.getQuantity());
-			Connection conn = SQLConnection.getConnection();
-			try {
-				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-				ResultSet rs;
-				rs = stmt.executeQuery("select max(\"version\") from \"contractPrice\" where \"contractId\"="+contract.getContract());
-				if(rs.first()) {
-						version=rs.getInt(1)+1;
-						System.out.println("ALL VERSION Price" + version);
-					}
-					
-				
-			conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			
 			price.setContractVersion(version);// set contract version
 
-			System.out.println("Check pp" + price.toString());
+			
 			contractPrice.insertContractProduct(price);
 
 		}
-		System.out.println("*********************");
-		
-		System.out.println("COUNTTTTT");
-		for (ContractProductFeatureLog c : contractPFLog) {
-			System.out.println(c);
-		}
-		System.out.println("*********************");
-
-		
+	
 		contractProductFeatureLog.insertContractProductFeature(contractPFLog);
 
 		return true;
