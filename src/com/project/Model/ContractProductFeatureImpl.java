@@ -15,49 +15,48 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 
 	@Override
 	public boolean insertContractProductFeature(ArrayList<ContractProductFeatureLog> contractProductFeatureLog) {
+		
+		System.out.println("COUNT HARSH");
 		Connection conn = SQLConnection.getConnection();
 		PreparedStatement ps = null;
 		boolean result = false;
 		int version=0;
 			try {
-				Statement stmt = conn.createStatement();
-<<<<<<< HEAD
-				ResultSet rs = stmt.executeQuery("select max(\"version\") from \"contractFeatureProductLog\" where \"contractId\"="+contractProductFeatureLog.get(0).getContractId());
-				int version = rs.getInt(1) + 1;
-=======
+				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+
 				ResultSet rs = stmt.executeQuery("select max(\"version\") from \"contractProductFeatureLog\" where \"contractId\"="+contractProductFeatureLog.get(0).getContractId());
-				while(rs.next()) {
-					version =rs.getInt(1)+1;
-				}
->>>>>>> master
+				if(rs.first()) {
+					
+						version=rs.getInt(1)+1;
+						System.out.println("ALL VERSION PFLog" + version);
+					}
+					
+				
+				
+				System.out.println("Version is  : " + version);
+
 				for(ContractProductFeatureLog con : contractProductFeatureLog)
 				{
+				
 					ps = conn.prepareStatement("Insert into \"contractProductFeatureLog\" values(?,?,?,?)",ResultSet.TYPE_SCROLL_SENSITIVE, 
 			                ResultSet.CONCUR_UPDATABLE);
+					
+					System.out.println("COUNT HARSH   " + con);
 					ps.setInt(1,con.getContractId());
 					ps.setInt(4,con.getProductId());
 					ps.setInt(2,con.getFeatureId());
 					ps.setInt(3,version);
-<<<<<<< HEAD
-=======
 					result = ps.execute();
-					int res = ps.executeUpdate();
->>>>>>> master
 					
-					if(res==0) {
-						
-						System.out.println("rrrrr pf log  " +res);
-						result=false;
-					}else
-					{
-						System.out.println("rrrrr pflog  " + res);
-						result= true;
-					}
+
+					System.out.println("Details " + con.getContractId() +" pro id" + con.getProductId()+" feature id "+ con.getFeatureId() +"version "+ version);
+
+					result = true;
 				}
 					
 				
 				
-//				conn.close();
+				conn.close();
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

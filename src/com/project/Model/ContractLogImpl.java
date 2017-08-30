@@ -18,17 +18,20 @@ public class ContractLogImpl implements ContractLogDao{
 	public boolean insertContractLog (ContractLog contract){
 		Connection conn = SQLConnection.getConnection();
 		PreparedStatement ps = null;
-		int result = 0;
 		boolean res =false;
 		int version=0;
 			try {
-				Statement stmt = conn.createStatement();
+				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
 
 				ResultSet rs = stmt.executeQuery("select max(\"version\") from \"contractLog\" where \"contractId\" ="+contract.getContract_id());
-			while(rs.next())
-			{
-				 version = rs.getInt(1) +1;
-			}
+				if(rs.first()) {
+					
+					
+						version=rs.getInt(1)+1;
+						System.out.println("ALL VERSION CL" + version);
+					
+					
+				}
 					ps = conn.prepareStatement("Insert into \"contractLog\" values(?,?,?,?,?,?,?,?,?,?,?)",ResultSet.TYPE_SCROLL_SENSITIVE, 
 			                ResultSet.CONCUR_UPDATABLE);
 
@@ -44,22 +47,14 @@ public class ContractLogImpl implements ContractLogDao{
 					java.sql.Date sqlDate = java.sql.Date.valueOf(contract.getInvoice_date());
 					ps.setDate(10,sqlDate);
 					ps.setInt(11,version );
-					result = ps.executeUpdate();
+					res = ps.execute();
 					
-					if(result==0) {
-						
-						System.out.println("rrrrr  " +result);
-						res=false;
-					}else
-					{
-						System.out.println("rrrrr  " + result);
-						res= true;
-					}
 
 			
 				
 					
-//					conn.close();
+					conn.close();
+					
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
