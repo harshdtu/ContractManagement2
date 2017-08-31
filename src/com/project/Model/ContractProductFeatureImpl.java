@@ -83,7 +83,8 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 				contract.setFeatureId(rs.getInt(2));
 				contract.setVersion(rs.getInt(3));
 				contractPFLog.add(contract);
-
+ 
+				System.out.println("PF  " + contract);
 			}
 			
 
@@ -115,7 +116,6 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 			ResultSet rs = stmt.executeQuery("Select max(\"version\") from \"contractProductFeatureLog\" where \"contractId\" =" + contractId);
 			if(rs.first()) {
 				version = rs.getInt(1);
-				System.out.println("Version  " + version);
 			}
 			ps = conn.prepareStatement("Select * from \"contractProductFeatureLog\" where \"contractId\" =" + contractId
 					+ "AND \"version\" =" + version ,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE );

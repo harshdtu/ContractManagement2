@@ -23,10 +23,9 @@ public class ContractBusinessLayer {
 	ContractProductPriceImpl contractPrice = new ContractProductPriceImpl();
 
 	public Contract getSpecificContract(int contractId, int contractVersion) {
-		ArrayList<Feature> Contractfeature = new ArrayList<>();
+		
 		ArrayList<Product> ContractProduct = new ArrayList<>();
 		Contract contract = new Contract();
-		Product product = new Product();
 		ContractLog contractLog = contractLogImpl.selectContractLog(contractId, contractVersion);
 		contract.setContract(contractLog.getContract_id());
 		contract.setBuyerId(contractLog.getBuyer_id());
@@ -37,21 +36,32 @@ public class ContractBusinessLayer {
 		contract.setStatus(contractLog.getVersion());
 		ArrayList<ContractProductPrice> contractProPrice = contractPrice.selectContractProductDetails(contractId,
 				contractVersion);
+		ArrayList<ContractProductFeatureLog> contractFeature = contractProductFeatureLog
+				.fetchContractProductFeature(contractId, contractVersion);
 		for (ContractProductPrice contractPrice : contractProPrice) {
+			Product product = new Product();
+			ArrayList<Feature> Contractfeature = new ArrayList<>();
 			product.setId(contractPrice.getProductId());
 			product.setPrice(contractPrice.getProductPrice());
 			product.setCategory(1); // fetch from api - TODO
 			product.setProductName("Mobile"); // fetch from api _TODO
 			product.setQuantity(contractPrice.getProductQuantity());
-			ArrayList<ContractProductFeatureLog> contractFeature = contractProductFeatureLog
-					.fetchContractProductFeature(contractId, contractVersion);
+		System.out.println("Inside For 2");
+			
 			for (ContractProductFeatureLog contractPF : contractFeature) {
+				
+				if(contractPF.getProductId()==contractPrice.getProductId()) {
+					System.out.println("Inside For 3");
 				Feature featureobj = new Feature();
 				featureobj.setFeatureId(contractPF.getFeatureId());
 				featureobj.setName("Feature");// fetch from api_TODO
 				Contractfeature.add(featureobj);
+				System.out.println(featureobj);
+			}
+				
 			}
 			product.setFeature(Contractfeature);
+			System.out.println(product);
 			ContractProduct.add(product);
 		}
 		contract.setProduct(ContractProduct);
