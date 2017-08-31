@@ -62,8 +62,8 @@ public class ContractBusinessLayer {
 
 		ContractLog contractLog = contractLogImpl.selectLatestContractLog(contractId);
 		Contract contract = new Contract();
-		Product product = new Product();
-		Feature feature = new Feature();
+		
+		
 		ArrayList<Product> contractProduct = new ArrayList<>();
 		ArrayList<Feature> contractFeature = new ArrayList<>();
 		contract.setContract(contractLog.getContract_id());
@@ -77,7 +77,7 @@ public class ContractBusinessLayer {
 				.selectLatestContractProductDetails(contractId);
 
 		for (ContractProductPrice contractPP : contractProductPrice) {
-
+			Product product = new Product();
 			product.setId(contractPP.getProductId());
 			product.setPrice(contractPP.getProductPrice());
 			product.setCategory(1); // fetch from api - TODO
@@ -86,7 +86,7 @@ public class ContractBusinessLayer {
 			ArrayList<ContractProductFeatureLog> contractProductFeature = contractProductFeatureLog
 					.fetchFinalContractProductFeature(contractId);
 			for (ContractProductFeatureLog contractPF : contractProductFeature) {
-
+				Feature feature = new Feature();
 				feature.setFeatureId(contractPF.getFeatureId());
 				feature.setName("Feature");// fetch from api_TODO
 				contractFeature.add(feature);
@@ -102,7 +102,7 @@ public class ContractBusinessLayer {
 	public boolean insertContract(Contract contract) {
 
 		ContractLog contractLog = new ContractLog();
-		int version=0;
+		int version = 0;
 		ArrayList<ContractProductFeatureLog> contractPFLog = new ArrayList<ContractProductFeatureLog>();
 		ContractProductPrice price = new ContractProductPrice();
 		contractLog.setContract_id(contract.getContract());
@@ -116,16 +116,16 @@ public class ContractBusinessLayer {
 		contractLogImpl.insertContractLog(contractLog);
 		Connection conn = SQLConnection.getConnection();
 		try {
-			Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			ResultSet rs;
-			rs = stmt.executeQuery("select max(\"version\") from \"contractPrice\" where \"contractId\"="+contract.getContract());
-			if(rs.first()) {
-					version=rs.getInt(1)+1;
-					System.out.println("ALL VERSION Price" + version);
-				}
-				
-			
-		conn.close();
+			rs = stmt.executeQuery(
+					"select max(\"version\") from \"contractPrice\" where \"contractId\"=" + contract.getContract());
+			if (rs.first()) {
+				version = rs.getInt(1) + 1;
+				System.out.println("ALL VERSION Price" + version);
+			}
+
+			conn.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -143,7 +143,8 @@ public class ContractBusinessLayer {
 				PFLog.setVersion(0);
 				PFLog.setFeatureId(ft.getFeatureId());
 				contractPFLog.add(PFLog);
-//				System.out.println("Check feature   " + PFLog.getFeatureId() + "  product " + PFLog.getProductId());
+				// System.out.println("Check feature " + PFLog.getFeatureId() + " product " +
+				// PFLog.getProductId());
 
 			}
 
@@ -151,15 +152,13 @@ public class ContractBusinessLayer {
 			price.setProductId(contractProduct.getId());
 			price.setProductPrice(contractProduct.getPrice());
 			price.setProductQuantity(contractProduct.getQuantity());
-			
-			
+
 			price.setContractVersion(version);// set contract version
 
-			
 			contractPrice.insertContractProduct(price);
 
 		}
-	
+
 		contractProductFeatureLog.insertContractProductFeature(contractPFLog);
 
 		return true;
@@ -174,21 +173,14 @@ public class ContractBusinessLayer {
 	public ArrayList<Contract> getAllContractsVersion(int contractId) {
 
 		ArrayList<Contract> contractList = new ArrayList<>();
-		ArrayList<Product> contractProduct = new ArrayList<>();
-		ArrayList<Feature> contractFeature = new ArrayList<>();
-		Contract contract= null;
-		ArrayList<ContractLog> contractLog = contractLogImpl.selectAllContractLogVersions(contractId);
-		ArrayList<ContractProductFeatureLog> contractPFLog = contractProductFeatureLog
-				.fetchVersionsContractProductFeature(contractId);
-		ArrayList<ContractProductPrice> contractPPrice = contractPrice.selectAllContractProductDetails(contractId);
-		for (ContractProductPrice price : contractPPrice) {
-			System.out.println("****************************");
-			System.out.println("PRICe" + price);
-			System.out.println("****************************");
-		}
 		
+		
+		Contract contract = null;
+		ArrayList<ContractLog> contractLog = contractLogImpl.selectAllContractLogVersions(contractId);
+     
+		// ArrayList<ContractProductPrice> contractPPrice =
+
 		for (ContractLog cl : contractLog) {
-			
 			contract = new Contract();
 			contract.setBuyerId(cl.getBuyer_id());
 			contract.setContract(cl.getContract_id());
@@ -197,43 +189,47 @@ public class ContractBusinessLayer {
 			contract.setPaymentTermId(cl.getPayment_term_id());
 			contract.setSellerId(cl.getSeller_id());
 			contract.setStatus(cl.getStatus_id());
-			
-		
-			for (ContractProductPrice price : contractPPrice) {
-				
+			ArrayList<ContractProductPrice> price = contractPrice.selectContractProductDetails(cl.getContract_id(),
+					cl.getVersion());
+			ArrayList<ContractProductFeatureLog> contractPFLog = contractProductFeatureLog
+					.fetchContractProductFeature(cl.getContract_id(), cl.getVersion());
+			ArrayList<Product> contractProduct = new ArrayList<>();
+			for (ContractProductPrice p : price) {
 				Product product = new Product();
-				product.setPrice(price.getProductPrice());
-				product.setId(price.getProductId());
-				product.setProductName("Mobile");// TODO fetch from api
-				product.setCategory(0);// TODO fetch from api
-				product.setQuantity(price.getProductQuantity());
-
-				for (ContractProductFeatureLog pfLog : contractPFLog) {
-					Feature feature = new Feature();
-					System.out.println("****************************");
-					System.out.println("PFLOG" + pfLog);
-					System.out.println("****************************");
-
-						feature.setFeatureId(pfLog.getFeatureId());
-						feature.setName("gorilla screen");// TODO fetch from api
-						System.out.println("############################");
-						System.out.println("FEATURE" + feature);
-						System.out.println("#############################");
-						contractFeature.add(feature);
+				
+				if (p.getContractVersion() == cl.getVersion() && p.getContractId() == cl.getContract_id()) {
+					
+					product.setPrice(p.getProductPrice());
+					product.setId(p.getProductId());
+					product.setProductName("Mobile");// TODO fetch from api
+					product.setCategory(0);// TODO fetch from api
+					product.setQuantity(p.getProductQuantity());
+					ArrayList<Feature> contractFeature = new ArrayList<>();
+					for (ContractProductFeatureLog pfLog : contractPFLog) {
+					
 						
-						
+						if (pfLog.getProductId() == product.getId() && pfLog.getVersion() == cl.getVersion()) {
+					
+							Feature feature = new Feature();
+							
+							feature.setFeatureId(pfLog.getFeatureId());
+							feature.setName("gorilla screen");// TODO fetch from api
+							contractFeature.add(feature);
+							
+							
+						}
+
+					}
 					product.setFeature(contractFeature);
+					contractProduct.add(product);
 				}
-				contractProduct.add(product);
 			}
 			contract.setProduct(contractProduct);
 			contractList.add(contract);
 		}
-		
 
 		return contractList;
 	}
-
 
 	public ArrayList<Contract> getAllContractsByUser(String userType, String userId) {
 		ArrayList<Contract> contract = new ArrayList<>();
