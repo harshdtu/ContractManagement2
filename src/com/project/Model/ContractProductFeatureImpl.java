@@ -108,19 +108,25 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 		Connection conn = SQLConnection.getConnection();
 		ArrayList<ContractProductFeatureLog> contractPFLog = new ArrayList<>();
 		Statement stmt = null;
-		
+		PreparedStatement ps = null;
+		int version =0;
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" =" + contractId
-					+ "AND \"version\" = (Select max(\"version\") from \"contractLog\" where \"contractId\" ="
-					+ contractId + ")");
+			ResultSet rs = stmt.executeQuery("Select max(\"version\") from \"contractProductFeatureLog\" where \"contractId\" =" + contractId);
+			if(rs.first()) {
+				version = rs.getInt(1);
+				System.out.println("Version  " + version);
+			}
+			ps = conn.prepareStatement("Select * from \"contractProductFeatureLog\" where \"contractId\" =" + contractId
+					+ "AND \"version\" =" + version ,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE );
+			ResultSet rs1 = ps.executeQuery();
 
-			while (rs.next()) {
+			while (rs1.next()) {
 				ContractProductFeatureLog contract = new ContractProductFeatureLog();
-				contract.setContractId(rs.getInt(1));
-				contract.setProductId(rs.getInt(4));
-				contract.setFeatureId(rs.getInt(2));
-				contract.setVersion(rs.getInt(3));
+				contract.setContractId(rs1.getInt(1));
+				contract.setProductId(rs1.getInt(4));
+				contract.setFeatureId(rs1.getInt(2));
+				contract.setVersion(rs1.getInt(3));
 
 				contractPFLog.add(contract);
 

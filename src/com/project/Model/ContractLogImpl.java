@@ -26,8 +26,6 @@ public class ContractLogImpl implements ContractLogDao{
 				ResultSet rs = stmt.executeQuery("select max(\"version\") from \"contractLog\" where \"contractId\" ="+contract.getContract_id());
 				if(rs.first()) {
 						version=rs.getInt(1)+1;
-						System.out.println("ALL VERSION CL" + version);
-					
 					
 				}
 					ps = conn.prepareStatement("Insert into \"contractLog\" values(?,?,?,?,?,?,?,?,?,?,?)",ResultSet.TYPE_SCROLL_SENSITIVE, 
