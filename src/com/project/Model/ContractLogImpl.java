@@ -75,13 +75,14 @@ public class ContractLogImpl implements ContractLogDao{
 	@Override
 	public ContractLog selectLatestContractLog(int contractId) {
 		Connection conn = SQLConnection.getConnection();
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		
 		ContractLog contractLog = new ContractLog();
 		try {
-			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" ="+contractId +"AND \"version\" = (Select max(\"version\") from \"contractLog\" where \"contractId\" ="+ contractId+")" );
-			
+			//stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+		//	ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" ="+contractId +"AND \"version\" = (Select max(\"version\") from \"contractLog\" where \"contractId\" ="+ contractId+")" );
+			stmt = conn.prepareStatement("Select * from \"contractLog\" where \"contractId\" ="+contractId +"AND \"version\" = (Select max(\"version\") from \"contractLog\" where \"contractId\" ="+ contractId+")" ,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+		    ResultSet rs = stmt.executeQuery();
 			while(rs.next())
 			{
 				
@@ -96,7 +97,8 @@ public class ContractLogImpl implements ContractLogDao{
 				contractLog.setPeriod_of_delivery(rs.getString(9));
 				contractLog.setInvoice_date(rs.getString(10));
 				contractLog.setVersion(rs.getInt(11));
-
+                
+				System.out.println(contractLog);
 				
 			}
 		} catch (SQLException e) {
@@ -117,12 +119,12 @@ public class ContractLogImpl implements ContractLogDao{
 	@Override
 	public ContractLog selectContractLog(int contract_id, int contractVersion) {
 		Connection conn = SQLConnection.getConnection();
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ContractLog contractLog = new ContractLog();
 		try {
-			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" ="+contract_id +"AND \"version\" ="+contractVersion);
 			
+			stmt = conn.prepareStatement("Select * from \"contractLog\" where \"contractId\" ="+contract_id +"AND \"version\" ="+contractVersion ,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			ResultSet rs= stmt.executeQuery();
 			while(rs.next())
 			{
 				
@@ -137,7 +139,7 @@ public class ContractLogImpl implements ContractLogDao{
 				contractLog.setPeriod_of_delivery(rs.getString(9));
 				contractLog.setInvoice_date(rs.getString(10));
 				contractLog.setVersion(rs.getInt(11));
-				
+				System.out.println("IMPL + " + contractLog.getContract_id());
 		
 				
 			}

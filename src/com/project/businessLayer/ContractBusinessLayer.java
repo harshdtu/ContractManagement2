@@ -36,8 +36,8 @@ public class ContractBusinessLayer {
 		contract.setStatus(contractLog.getVersion());
 		ArrayList<ContractProductPrice> contractProPrice = contractPrice.selectContractProductDetails(contractId,
 				contractVersion);
-		ArrayList<ContractProductFeatureLog> contractFeature = contractProductFeatureLog
-				.fetchContractProductFeature(contractId, contractVersion);
+		System.out.println("Inside For 0 "  + contractLog.getContract_id());
+		ArrayList<ContractProductFeatureLog> contractFeature = contractProductFeatureLog.fetchContractProductFeature(contractId, contractVersion);
 		for (ContractProductPrice contractPrice : contractProPrice) {
 			Product product = new Product();
 			ArrayList<Feature> Contractfeature = new ArrayList<>();
@@ -46,8 +46,8 @@ public class ContractBusinessLayer {
 			product.setCategory(1); // fetch from api - TODO
 			product.setProductName("Mobile"); // fetch from api _TODO
 			product.setQuantity(contractPrice.getProductQuantity());
-		System.out.println("Inside For 2");
-			
+		    System.out.println("Inside For 2");
+			  
 			for (ContractProductFeatureLog contractPF : contractFeature) {
 				
 				if(contractPF.getProductId()==contractPrice.getProductId()) {
@@ -69,11 +69,10 @@ public class ContractBusinessLayer {
 	}
 
 	public Contract getLatestContract(int contractId) {
-
+		
 		ContractLog contractLog = contractLogImpl.selectLatestContractLog(contractId);
 		Contract contract = new Contract();
 		ArrayList<Product> contractProduct = new ArrayList<>();
-//		ArrayList<Feature> contractFeature = new ArrayList<>();
 		contract.setContract(contractLog.getContract_id());
 		contract.setBuyerId(contractLog.getBuyer_id());
 		contract.setSellerId(contractLog.getSeller_id());

@@ -116,6 +116,7 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 			ResultSet rs = stmt.executeQuery("Select max(\"version\") from \"contractProductFeatureLog\" where \"contractId\" =" + contractId);
 			if(rs.first()) {
 				version = rs.getInt(1);
+				System.out.println("VERSION " + version);
 			}
 			ps = conn.prepareStatement("Select * from \"contractProductFeatureLog\" where \"contractId\" =" + contractId
 					+ "AND \"version\" =" + version ,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE );
@@ -126,8 +127,8 @@ public class ContractProductFeatureImpl implements ContractProductFeatureLogDao 
 				contract.setContractId(rs1.getInt(1));
 				contract.setProductId(rs1.getInt(4));
 				contract.setFeatureId(rs1.getInt(2));
-				contract.setVersion(rs1.getInt(3));
-
+				contract.setVersion(version);
+				System.out.println("contract  pf " + contract);
 				contractPFLog.add(contract);
 
 			}

@@ -52,7 +52,7 @@ public class ContractResource {
 	@GET
 	@Path("/{contractId}/version/{contractVersion}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Contract getSpecificContract(@PathParam("contractId") int contractId, @PathParam("version") int contractVersion) {
+	public Contract getSpecificContract(@PathParam("contractId") int contractId, @PathParam("contractVersion") int contractVersion) {
 		return contractBL.getSpecificContract(contractId, contractVersion);
 	}
 	
@@ -79,7 +79,7 @@ public class ContractResource {
 	@Path("/{contractId}/status")
 	@Produces(MediaType.APPLICATION_JSON)
 	public int getStatus(@PathParam("contractId") int contractId) {
-		int status = 0;
+		int status = contractBL.getContractStatus(contractId);
 		return status;
 	}
 	
