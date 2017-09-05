@@ -9,11 +9,15 @@ import java.util.ArrayList;
 import com.project.Model.ContractLogImpl;
 import com.project.Model.ContractProductFeatureImpl;
 import com.project.Model.ContractProductPriceImpl;
+import com.project.Model.DeliveryImpl;
+import com.project.Model.PaymentsImpl;
 import com.project.data.Contract;
 import com.project.data.ContractLog;
 import com.project.data.ContractProductFeatureLog;
 import com.project.data.ContractProductPrice;
+import com.project.data.DeliveryTerm;
 import com.project.data.Feature;
+import com.project.data.PaymentTerm;
 import com.project.data.Product;
 import com.project.database.SQLConnection;
 
@@ -244,6 +248,18 @@ public class ContractBusinessLayer {
 		return contractList;
 	}
 
+	public ArrayList<PaymentTerm> getAllPaymentTerms(){
+		
+		PaymentsImpl pi = new PaymentsImpl();
+		ArrayList<PaymentTerm> payments = pi.fetchAllPaymentTerms();
+		return payments;
+	}
+	public ArrayList<DeliveryTerm> getAllDeliveryTerms(){
+		DeliveryImpl di = new DeliveryImpl();
+		ArrayList<DeliveryTerm> delivery = di.fetchAllDeliveryTerm();
+		return delivery;
+		
+	}
 	public ArrayList<Contract> getAllContractsByUser(String userType, String userId) {
 		ArrayList<Contract> contract = new ArrayList<>();
 		ArrayList<ContractProductFeatureLog> contractPf = new ArrayList<>();

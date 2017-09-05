@@ -313,6 +313,59 @@ public class ContractLogImpl implements ContractLogDao{
 
 
 
+	public ArrayList<ContractLog> getAllArchivedContracts() {
+
+		Connection conn = SQLConnection.getConnection();
+		ArrayList<ContractLog> archivedContract = new ArrayList<>();
+		
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			ResultSet rs = stmt.executeQuery("select * from \"contractLog\" where \"status\"="+5);
+			
+			while(rs.next())
+			{
+				ContractLog contract = new ContractLog();
+				contract.setContract_id(rs.getInt(1));
+				contract.setSeller_id(rs.getString(2));
+				contract.setBuyer_id(rs.getString(3));
+				contract.setStatus_id(rs.getInt(4));
+				contract.setDelivery_term_id(rs.getInt(5));
+				contract.setPayment_term_id(rs.getInt(6));
+				contract.setProposal_id(rs.getInt(7));
+				contract.setPrice(rs.getFloat(8));
+				contract.setPeriod_of_delivery(rs.getString(9));
+				contract.setInvoice_date(rs.getString(10));
+				contract.setVersion(rs.getInt(11));
+				
+				archivedContract.add(contract);
+
+				
+			}
+	
+
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		}
+		
+		
+			
+			return archivedContract;
+	// TODO Auto-generated method stub
+
+	}
+
+
+
+
 //	@Override
 //	public ContractLog selectContractLogStatus(int contract_id) {
 //		ContractLog contract = new ContractLog();

@@ -142,4 +142,44 @@ public class ContractProductPriceImpl implements ContractProductPriceDAO {
 		return contractPrice;
 	}
 
+	@Override
+	public ArrayList<ContractProductPrice> getAllArchivedFeatures() {
+
+		Connection conn = SQLConnection.getConnection();
+		ArrayList<ContractProductPrice> archivedContractPrice = new ArrayList<>();
+	
+		PreparedStatement pstmt = null;
+		try {
+
+			pstmt = conn.prepareStatement("select * from \"contractLog\" where \"status\"="+5,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				ContractProductPrice contract = new ContractProductPrice();
+				contract.setContractId(rs.getInt(1));
+				contract.setProductId(rs.getInt(2));
+				contract.setProductPrice(rs.getDouble(3));
+				contract.setProductQuantity(rs.getInt(4));
+				contract.setContractVersion(rs.getInt(5));
+
+				archivedContractPrice.add(contract);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		} finally {
+			try {
+
+				conn.close();
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+			}
+		}
+		return archivedContractPrice;
+	
+		// TODO Auto-generated method stub
+	}
+
 }
