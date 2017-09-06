@@ -64,6 +64,13 @@ public class ContractResource {
 		return contractBL.getAllContractsVersion(contractId);
 	}
 	
+	// Get all archive contract
+	@GET
+	@Path("/archive")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Contract> getAllArchivedContracts(){
+		return contractBL.getAllArchivedContracts();
+	}
 	
 	// Get all contracts involving the user. User "type" is given as Query parameter and can have 2 values,'buyer' and 'seller' 
 	@GET

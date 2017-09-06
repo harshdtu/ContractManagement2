@@ -10,4 +10,6 @@ public interface ContractProductFeatureLogDao {
 	ArrayList<ContractProductFeatureLog> fetchContractProductFeature(int contractId, int contractVersion);
 	ArrayList<ContractProductFeatureLog> fetchVersionsContractProductFeature(int contractId);
 	ArrayList<ContractProductFeatureLog> fetchFinalContractProductFeature(int contractId);
+
+
 }

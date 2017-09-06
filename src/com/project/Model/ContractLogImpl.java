@@ -79,8 +79,7 @@ public class ContractLogImpl implements ContractLogDao{
 		
 		ContractLog contractLog = new ContractLog();
 		try {
-			//stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-		//	ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" ="+contractId +"AND \"version\" = (Select max(\"version\") from \"contractLog\" where \"contractId\" ="+ contractId+")" );
+		
 			stmt = conn.prepareStatement("Select * from \"contractLog\" where \"contractId\" ="+contractId +"AND \"version\" = (Select max(\"version\") from \"contractLog\" where \"contractId\" ="+ contractId+")" ,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
 		    ResultSet rs = stmt.executeQuery();
 			while(rs.next())
@@ -321,7 +320,7 @@ public class ContractLogImpl implements ContractLogDao{
 		Statement stmt = null;
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			ResultSet rs = stmt.executeQuery("select * from \"contractLog\" where \"status\"="+5);
+			ResultSet rs = stmt.executeQuery("select * from \"contractLog\" where \"statusId\"="+5);
 			
 			while(rs.next())
 			{
@@ -359,7 +358,7 @@ public class ContractLogImpl implements ContractLogDao{
 		
 			
 			return archivedContract;
-	// TODO Auto-generated method stub
+	
 
 	}
 

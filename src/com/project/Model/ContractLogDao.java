@@ -12,7 +12,7 @@ public interface ContractLogDao {
 	public ArrayList<ContractLog> selectAllContractLogSeller(String sellerId);
 	public ArrayList<ContractLog> selectAllContractLogBuyer(String buyerId);
 	public ArrayList<ContractLog> selectAllContractLogVersions(int contractId);
-//	public ArrayList<ContractLog> getAllArchivedContracts();
+    public ArrayList<ContractLog> getAllArchivedContracts();
 
 
 }

@@ -260,6 +260,61 @@ public class ContractBusinessLayer {
 		return delivery;
 		
 	}
+	public ArrayList<Contract> getAllArchivedContracts() {
+		ArrayList<ContractLog> ac=contractLogImpl.getAllArchivedContracts();
+		ArrayList<Contract> contract=new ArrayList<>();
+	
+		for(ContractLog con: ac) {
+			System.out.println("Contract Id " + con.toString());
+			Contract contractObj = new Contract();
+			contractObj.setBuyerId(con.getBuyer_id());
+			contractObj.setContract(con.getContract_id());
+			contractObj.setDateofInvoice(con.getInvoice_date());
+			contractObj.setDeliveryTermId(con.getDelivery_term_id());
+			contractObj.setPaymentTermId(con.getPayment_term_id());
+			contractObj.setPeriodOfDelivery(con.getPeriod_of_delivery());
+			contractObj.setSellerId(con.getSeller_id());
+			contractObj.setStatus(con.getStatus_id());
+			ArrayList<ContractProductFeatureLog> contractFeature = contractProductFeatureLog.fetchContractProductFeature(con.getContract_id(), con.getVersion());
+			
+			ArrayList<ContractProductPrice> contractProPrice = contractPrice.selectContractProductDetails(con.getContract_id(), con.getVersion());
+			ArrayList<Product> product=new ArrayList<>();
+			for(ContractProductPrice cp : contractProPrice) {
+				Product productObj = new Product();
+				ArrayList<Feature> feature = new ArrayList<>();
+					productObj.setId(cp.getProductId());
+					productObj.setCategory(0);
+					productObj.setPrice(cp.getProductPrice());
+					productObj.setProductName("Mobile");
+					productObj.setQuantity(cp.getProductQuantity());
+					
+					System.out.println("Product " + productObj);
+					
+				
+			for(ContractProductFeatureLog cpf: contractFeature)
+			{
+				if(productObj.getId()==cpf.getProductId())
+				{
+					Feature featureObj = new Feature();
+					featureObj.setFeatureId(cpf.getFeatureId());
+					featureObj.setName("gorilla screen");
+					feature.add(featureObj);
+					
+					
+				}
+				
+			}
+			productObj.setFeature(feature);
+			product.add(productObj);
+				}
+			
+			contractObj.setProduct(product);
+			contract.add(contractObj);
+			}
+		return contract;
+	}
+
+	
 	public ArrayList<Contract> getAllContractsByUser(String userType, String userId) {
 		ArrayList<Contract> contract = new ArrayList<>();
 		ArrayList<ContractProductFeatureLog> contractPf = new ArrayList<>();

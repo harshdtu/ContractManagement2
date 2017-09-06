@@ -9,6 +9,6 @@ public interface ContractProductPriceDAO {
 	public ArrayList<ContractProductPrice> selectContractProductDetails(int contractId, int contractVersion);
 	public ArrayList<ContractProductPrice> selectAllContractProductDetails(int contractId);
 	public ArrayList<ContractProductPrice> selectLatestContractProductDetails(int contractId);
-	public ArrayList<ContractProductPrice> getAllArchivedFeatures();
+	
 
 }
