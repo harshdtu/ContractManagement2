@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import com.project.businessLayer.ContractBusinessLayer;
 import com.project.businessLayer.DraftContractBL;
 import com.project.data.Contract;
+import com.project.data.MinContract;
 
 
 @Path("/contracts")
@@ -39,6 +40,7 @@ public class ContractResource {
 		System.out.println(contract);
 		return contractBL.insertContract(contract);
 	}
+	 
 	
 	// Get the latest contract
 	@Path("/{contractId}")
@@ -81,6 +83,15 @@ public class ContractResource {
 		return contractBL.getAllContractsByUser(userType, userId);
 	}
 	
+	@GET
+	@Path("/min/users/{userId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	// type = seller or buyer
+	public ArrayList<MinContract> getMinContractsByUser(@QueryParam("type") String userType, @PathParam("userId") String userId){
+		//return contractBL.getAllContractsByUser(userType, userId);
+		return contractBL.getMinContracts(userType, userId);
+	}
+	
 	// Get status of a contract
 	@GET
 	@Path("/{contractId}/status")
@@ -89,6 +100,17 @@ public class ContractResource {
 		int status = contractBL.getContractStatus(contractId);
 		return status;
 	}
+	
+	//update status of contract to archive
+	@POST
+	@Path("/update/status")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public boolean postContractStatus(Contract contract) {
+		System.out.println(contract);
+		return contractBL.updateContractStatus(contract);
+	}
+	
+	
 	
 	
 }

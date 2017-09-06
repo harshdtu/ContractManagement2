@@ -97,7 +97,7 @@ public class ContractLogImpl implements ContractLogDao{
 				contractLog.setInvoice_date(rs.getString(10));
 				contractLog.setVersion(rs.getInt(11));
                 
-				System.out.println(contractLog);
+				
 				
 			}
 		} catch (SQLException e) {
@@ -165,11 +165,11 @@ public class ContractLogImpl implements ContractLogDao{
 		Connection conn = SQLConnection.getConnection();
 		ArrayList<ContractLog> historyContract = new ArrayList<>();
 		ContractLog contract = new ContractLog();
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		try {
-			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"sellerId\" ="+ sellerId  );
 			
+			stmt=conn.prepareStatement("Select * from \"contractLog\" where \"sellerId\" ="+ sellerId , ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next())
 			{
 				
@@ -216,11 +216,11 @@ public class ContractLogImpl implements ContractLogDao{
 		Connection conn = SQLConnection.getConnection();
 		ArrayList<ContractLog> historyContract = new ArrayList<>();
 		
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		try {
-			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"buyerId\" ="+buyerId  );
 			
+			stmt= conn.prepareStatement("Select * from \"contractLog\" where \"buyerId\" =" +buyerId,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE  );
+			ResultSet rs= stmt.executeQuery();
 			while(rs.next())
 			{
 				ContractLog contract = new ContractLog();
@@ -320,7 +320,7 @@ public class ContractLogImpl implements ContractLogDao{
 		Statement stmt = null;
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			ResultSet rs = stmt.executeQuery("select * from \"contractLog\" where \"statusId\"="+5);
+			ResultSet rs = stmt.executeQuery("select * from \"contractLog\" where \"statusId\"="+4);
 			
 			while(rs.next())
 			{
@@ -360,6 +360,26 @@ public class ContractLogImpl implements ContractLogDao{
 			return archivedContract;
 	
 
+	}
+
+
+
+
+	@Override
+	public boolean updateStatus(int contractId, int contractVersion,int status) {
+		// TODO Auto-generated method stub
+		Connection conn = SQLConnection.getConnection();
+		PreparedStatement ps = null;
+		boolean result =false;
+		try {
+			ps=conn.prepareStatement("Update \"contractLog\" SET \"statusId\" ="+ status+" where \"contractId\" =" + contractId +"AND \"contractVersion\" = "+ contractVersion);
+			result = ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		return result;
 	}
 
 

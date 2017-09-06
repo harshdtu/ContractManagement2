@@ -13,6 +13,7 @@ public interface ContractLogDao {
 	public ArrayList<ContractLog> selectAllContractLogBuyer(String buyerId);
 	public ArrayList<ContractLog> selectAllContractLogVersions(int contractId);
     public ArrayList<ContractLog> getAllArchivedContracts();
+    public boolean updateStatus(int contractId, int contractVersion,int status);
 
 
 }
