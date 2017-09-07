@@ -18,12 +18,15 @@ public class ContractLogImpl implements ContractLogDao{
 	public boolean insertContractLog (ContractLog contract){
 		Connection conn = SQLConnection.getConnection();
 		PreparedStatement ps = null;
+		PreparedStatement ps1 = null;
 		boolean res =false;
 		int version=0;
 			try {
-				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+				
 
-				ResultSet rs = stmt.executeQuery("select max(\"version\") from \"contractLog\" where \"contractId\" ="+contract.getContract_id());
+				ps1=conn.prepareStatement("select max(\"version\") from \"contractLog\" where \"contractId\" = ?",ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+				ps1.setInt(1, contract.getContract_id());
+				ResultSet rs = ps1.executeQuery();
 				if(rs.first()) {
 						version=rs.getInt(1)+1;
 					
@@ -80,8 +83,10 @@ public class ContractLogImpl implements ContractLogDao{
 		ContractLog contractLog = new ContractLog();
 		try {
 		
-			stmt = conn.prepareStatement("Select * from \"contractLog\" where \"contractId\" ="+contractId +"AND \"version\" = (Select max(\"version\") from \"contractLog\" where \"contractId\" ="+ contractId+")" ,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-		    ResultSet rs = stmt.executeQuery();
+			stmt = conn.prepareStatement("Select * from \"contractLog\" where \"contractId\" = ? AND \"version\" = (Select max(\"version\") from \"contractLog\" where \"contractId\" = ?)" ,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			stmt.setInt(1, contractId);
+			stmt.setInt(2, contractId);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next())
 			{
 				
@@ -122,7 +127,9 @@ public class ContractLogImpl implements ContractLogDao{
 		ContractLog contractLog = new ContractLog();
 		try {
 			
-			stmt = conn.prepareStatement("Select * from \"contractLog\" where \"contractId\" ="+contract_id +"AND \"version\" ="+contractVersion ,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			stmt = conn.prepareStatement("Select * from \"contractLog\" where \"contractId\" = ? AND \"version\" = ?",ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			stmt.setInt(1, contract_id);
+			stmt.setInt(2, contractVersion);
 			ResultSet rs= stmt.executeQuery();
 			while(rs.next())
 			{
@@ -138,7 +145,6 @@ public class ContractLogImpl implements ContractLogDao{
 				contractLog.setPeriod_of_delivery(rs.getString(9));
 				contractLog.setInvoice_date(rs.getString(10));
 				contractLog.setVersion(rs.getInt(11));
-				System.out.println("IMPL + " + contractLog.getContract_id());
 		
 				
 			}
@@ -168,7 +174,8 @@ public class ContractLogImpl implements ContractLogDao{
 		PreparedStatement stmt = null;
 		try {
 			
-			stmt=conn.prepareStatement("Select * from \"contractLog\" where \"sellerId\" ="+ sellerId , ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			stmt=conn.prepareStatement("Select * from \"contractLog\" where \"sellerId\" = ?", ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			stmt.setString(1, sellerId);;
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next())
 			{
@@ -219,7 +226,8 @@ public class ContractLogImpl implements ContractLogDao{
 		PreparedStatement stmt = null;
 		try {
 			
-			stmt= conn.prepareStatement("Select * from \"contractLog\" where \"buyerId\" =" +buyerId,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE  );
+			stmt= conn.prepareStatement("Select * from \"contractLog\" where \"buyerId\" =?",ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE  );
+			stmt.setString(1, buyerId);
 			ResultSet rs= stmt.executeQuery();
 			while(rs.next())
 			{
@@ -235,7 +243,7 @@ public class ContractLogImpl implements ContractLogDao{
 				contract.setPeriod_of_delivery(rs.getString(9));
 				contract.setInvoice_date(rs.getString(10));
 				contract.setVersion(rs.getInt(11));
-				
+				System.out.println(" CL " + contract.toString());
 				historyContract.add(contract);
 			
 			}
@@ -266,11 +274,12 @@ public class ContractLogImpl implements ContractLogDao{
 		Connection conn = SQLConnection.getConnection();
 		ArrayList<ContractLog> historyContract = new ArrayList<>();
 		
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		try {
-			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			ResultSet rs = stmt.executeQuery("Select * from \"contractLog\" where \"contractId\" ="+contractId  );
 			
+			stmt=conn.prepareStatement("Select * from \"contractLog\" where \"contractId\" = ?",ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE );
+			stmt.setInt(1, contractId);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next())
 			{
 				ContractLog contract = new ContractLog();
@@ -320,7 +329,7 @@ public class ContractLogImpl implements ContractLogDao{
 		Statement stmt = null;
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			ResultSet rs = stmt.executeQuery("select * from \"contractLog\" where \"statusId\"="+4);
+			ResultSet rs = stmt.executeQuery("select * from \"contractLog\" where \"statusId\"= 4");
 			
 			while(rs.next())
 			{
@@ -372,7 +381,11 @@ public class ContractLogImpl implements ContractLogDao{
 		PreparedStatement ps = null;
 		boolean result =false;
 		try {
-			ps=conn.prepareStatement("Update \"contractLog\" SET \"statusId\" ="+ status+" where \"contractId\" =" + contractId +"AND \"contractVersion\" = "+ contractVersion);
+			ps=conn.prepareStatement("Update \"contractLog\" SET \"statusId\" = ? where \"contractId\" = ? AND \"contractVersion\" = ? ");
+			ps.setInt(1, status);
+			ps.setInt(2, contractId);
+			ps.setInt(3, contractVersion);
+			
 			result = ps.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

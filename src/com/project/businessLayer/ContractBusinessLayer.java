@@ -41,7 +41,6 @@ public class ContractBusinessLayer {
 		contract.setStatus(contractLog.getVersion());
 		ArrayList<ContractProductPrice> contractProPrice = contractPrice.selectContractProductDetails(contractId,
 				contractVersion);
-		System.out.println("Inside For 0 " + contractLog.getContract_id());
 		ArrayList<ContractProductFeatureLog> contractFeature = contractProductFeatureLog
 				.fetchContractProductFeature(contractId, contractVersion);
 		for (ContractProductPrice contractPrice : contractProPrice) {
@@ -427,6 +426,7 @@ public class ContractBusinessLayer {
 			contractObj.setDescription("This contract is to certify");
 			contractObj.setSellerId(cl.getSeller_id());
 			contractObj.setStatus(cl.getStatus_id());
+			
 			contracts.add(contractObj);
 		}
 		return contracts;
